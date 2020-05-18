@@ -1,0 +1,57 @@
+server:
+  port: 8081
+spring:
+
+  # 配置rabbitmq的地址以及用户密码
+  rabbitmq:
+    host: 192.168.7.241
+    port: 5672
+    username: yunny
+    password: 123456
+    virtual-host: /channel/local
+    listener:
+      simple:
+        retry:
+          enabled: false #是否开启消费者重试（为false时关闭消费者重试，这时消费端代码异常会一直重复收到消息）
+          # max-attempts: 3 #最大重试次数
+          # initial-interval: 3000 #重试间隔时间（单位毫秒）
+          # max-interval: 1200000 #重试最大时间间隔（单位毫秒）
+          # multiplier: 3 #应用于前一重试间隔的乘法器。
+  #redis链接
+  redis:
+    host: 192.168.7.241
+    port: 6379
+    jedis:
+      pool:
+        max-active: 300
+        max-wait: 10ms
+        max-idle: 100
+        min-idle: 20
+    database: 0
+    timeout: 60000ms
+    password: 123456
+  #数据库连接配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.7.241:3306/yunny_local?characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+
+#mybatis的相关配置
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.zhg.demo.mybatis.entity
+  #开启驼峰命名
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+#  logback.logDir=./log
+#  logback.level=debug
+
+# 日志目录
+logback:
+  # 配置输出额日志文件名,可以带路径
+  logDir: ./log
+  level: debug

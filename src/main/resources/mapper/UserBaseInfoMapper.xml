@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunny.channel.mapper.UserBaseInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.UserBaseInfoDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_no" jdbcType="VARCHAR" property="userNo"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_nick_name" jdbcType="VARCHAR" property="userNickName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="user_picture" jdbcType="VARCHAR" property="userPicture"/>
+        <result column="user_email" jdbcType="VARCHAR" property="userEmail"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="limit_type" jdbcType="TINYINT" property="limitType"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, user_no, user_name, user_nick_name, password, mobile, user_picture, user_email,
+     state,limit_type
+  </sql>
+    <select id="selectUserBaseInfoDOList" parameterType="com.yunny.channel.common.query.UserBaseInfoQuery"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_base_info
+        <where>
+
+            <if test="id != null">
+                and id= #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userNo != null">
+                and user_no= #{userNo,jdbcType=VARCHAR}
+            </if>
+
+            <if test="mobile != null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+
+            <if test="userEmail != null">
+                and user_email = #{userEmail,jdbcType=VARCHAR}
+            </if>
+
+        </where>
+    </select>
+
+
+
+
+    <select id="countByQuery" parameterType="com.yunny.channel.common.query.UserBaseInfoQuery" resultType="java.lang.Long">
+        select count(*) from user_base_info
+
+        <where>
+
+            <if test="id != null">
+                and id= #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userNo != null">
+                and user_no= #{userNo,jdbcType=VARCHAR}
+            </if>
+
+            <if test="mobile != null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+
+            <if test="userEmail != null">
+                and user_email = #{userEmail,jdbcType=VARCHAR}
+            </if>
+
+        </where>
+    </select>
+
+
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.UserBaseInfoQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user_base_info
+        <where>
+            <if test="id != null">
+                and id= #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userNo != null">
+                and user_no= #{userNo,jdbcType=VARCHAR}
+            </if>
+
+            <if test="mobile != null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+
+            <if test="userEmail != null">
+                and user_email = #{userEmail,jdbcType=VARCHAR}
+            </if>
+
+        </where>
+        order by id desc
+        <if test="pageParameter != null">
+            limit #{pageParameter.offset},#{pageParameter.pageSize}
+        </if>
+    </select>
+
+
+</mapper>
