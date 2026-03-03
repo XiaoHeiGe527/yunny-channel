@@ -321,7 +321,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>5.7.1</version> <!-- 使用适合你项目的版本 -->
+            <version>5.7.14</version> <!-- 使用适合你项目的版本 -->
         </dependency>
 
 
