@@ -22,7 +22,7 @@
         <mybaitsplus.version>3.4.2</mybaitsplus.version>
         <fastjson.version>1.2.46</fastjson.version>
       <!--  <xxl-job.version>2.2.0-SNAPSHOT</xxl-job.version>--><!--旧版翱游的-->
-        <xxl-job.version>2.4.0-SNAPSHOT</xxl-job.version><!--新版我用的-->
+        <xxl-job.version>3.2.0</xxl-job.version><!--新版我用的-->
         <aliyun-java-sdk.version>4.5.1</aliyun-java-sdk.version>
         <aliyun-sdk-oss.version>3.10.2</aliyun-sdk-oss.version>
         <jjwt.version>0.9.0</jjwt.version>
