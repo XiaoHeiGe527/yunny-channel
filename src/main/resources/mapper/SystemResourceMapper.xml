@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.SystemResourceMapper" >
+
+    <!-- 基础结果集映射（所有字段对应system_resource表的sr别名） -->
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.SystemResourceDO">
+        <id column="id" jdbcType="INTEGER" property="id"/> <!-- 对应sr.id -->
+        <result column="name" jdbcType="VARCHAR" property="name"/> <!-- 对应sr.name -->
+        <result column="url" jdbcType="VARCHAR" property="url"/> <!-- 对应sr.url -->
+        <result column="state" jdbcType="TINYINT" property="state"/> <!-- 对应sr.state -->
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/> <!-- 对应sr.parent_id -->
+        <result column="order_num" jdbcType="INTEGER" property="orderNum"/> <!-- 对应sr.order_num -->
+    </resultMap>
+
+    <!-- 基础查询字段列表（明确指定system_resource表的sr别名，避免关联查询歧义） -->
+    <sql id="Base_Column_List">
+        sr.id,
+        sr.name,
+        sr.url,
+        sr.state,
+        sr.parent_id,
+        sr.order_num
+    </sql>
+
+    <!-- 分页查询（单表查询也添加表别名sr，保持与字段列表一致） -->
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.SystemResourceQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from system_resource sr  <!-- 单表查询也起别名sr，与字段列表匹配 -->
+        where 1 = 1
+        <if test="state != null">
+            AND sr.state = #{state}  <!-- 明确使用sr.state -->
+        </if>
+        order by sr.parent_id asc, sr.order_num asc  <!-- 明确使用sr前缀 -->
+    </select>
+
+    <!-- 分页计数（单表查询添加别名sr） -->
+    <select id="countByQuery" parameterType="com.yunny.channel.common.query.SystemResourceQuery" resultType="java.lang.Long">
+        select count(*) from system_resource sr  <!-- 起别名sr -->
+        where 1 = 1
+        <if test="state != null">
+            AND sr.state = #{state}  <!-- 明确使用sr.state -->
+        </if>
+    </select>
+
+    <!-- 主键查询（单表查询添加别名sr） -->
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from system_resource sr  <!-- 起别名sr -->
+        where sr.id = #{id}  <!-- 明确使用sr.id -->
+    </select>
+
+    <!-- 新增（单表操作，无需别名） -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.SystemResourceDO">
+        insert into system_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="url != null and url != ''">url,</if>
+            <if test="state != null">state,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="orderNum != null">order_num,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="url != null and url != ''">#{url},</if>
+            <if test="state != null">#{state},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+        </trim>
+    </insert>
+
+    <!-- 主键更新（单表操作，无需别名） -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.SystemResourceDO">
+        UPDATE system_resource
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据用户编号查询权限路径列表（关联查询明确sr别名） -->
+    <select id="selectUserResourceList" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT DISTINCT
+        sr.url AS url  <!-- 明确sr.url -->
+        FROM
+        system_user_role sur,
+        system_role_resource srr,
+        system_resource sr  <!-- 别名sr -->
+        WHERE
+        sur.user_no = #{userNo}
+        AND sur.role_id = srr.role_id
+        AND sr.id = srr.resource_id  <!-- 明确sr.id -->
+        AND sr.state = 1  <!-- 明确sr.state -->
+    </select>
+
+    <!-- 批量失效资源（单表操作） -->
+    <update id="resourceDQ">
+        UPDATE system_resource
+        <set>
+            state = 0
+        </set>
+    </update>
+
+    <!-- 根据角色ID查询该角色拥有的权限资源（关联查询明确sr别名） -->
+    <select id="listByRoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />  <!-- 已包含sr前缀 -->
+        FROM
+        system_resource sr  <!-- 别名sr -->
+        INNER JOIN
+        system_role_resource srr ON sr.id = srr.resource_id  <!-- 明确sr.id -->
+        WHERE
+        srr.role_id = #{roleId}
+        AND sr.state = 1  <!-- 明确sr.state -->
+        ORDER BY
+        sr.parent_id ASC,  <!-- 明确sr前缀 -->
+        sr.order_num ASC
+    </select>
+
+    <!-- 根据用户编号查询其所有有效一级和二级权限资源（关联查询明确sr别名） -->
+    <!-- 根据用户编号查询其所有有效一级和二级权限资源（关联查询明确sr别名） -->
+    <select id="selectUserValid2LevelResourcesByUserNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT DISTINCT
+        <include refid="Base_Column_List" />  <!-- 已包含sr前缀 -->
+        FROM
+        system_resource sr  <!-- 别名sr -->
+        INNER JOIN system_role_resource srr ON sr.id = srr.resource_id  <!-- 明确sr.id -->
+        INNER JOIN system_user_role sur ON srr.role_id = sur.role_id
+        WHERE
+        sur.user_no = #{userNo}
+        AND sr.state = 1  <!-- 明确sr.state -->
+        AND (
+        -- 一级权限：明确sr.parent_id
+        (sr.parent_id IS NULL OR sr.parent_id = 0)
+        -- 二级权限：子查询也明确使用别名
+        OR sr.parent_id IN (
+        SELECT sr2.id  <!-- 子查询中system_resource别名sr2 -->
+        FROM system_resource sr2
+        WHERE (sr2.parent_id IS NULL OR sr2.parent_id = 0)  <!-- 明确sr2.parent_id -->
+        AND sr2.id IN (
+        SELECT srr2.resource_id
+        FROM system_role_resource srr2
+        INNER JOIN system_user_role sur2 ON srr2.role_id = sur2.role_id
+        WHERE sur2.user_no = #{userNo}
+        )
+        AND sr2.state = 1  <!-- 明确sr2.state -->
+        )
+        )
+        ORDER BY
+        sr.parent_id ASC,
+        -- 核心修改：order_num不为空则按order_num排序，为空则按id排序
+        CASE
+        WHEN sr.order_num IS NOT NULL THEN sr.order_num
+        ELSE sr.id
+        END ASC
+    </select>
+
+</mapper>

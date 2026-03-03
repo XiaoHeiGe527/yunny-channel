@@ -1,9 +1,11 @@
 package com.yunny.channel.service;
 
 import com.yunny.channel.common.page.CommonPager;
+import com.yunny.channel.common.query.LoginUserQuery;
 import com.yunny.channel.common.query.UserBaseInfoQuery;
 import com.yunny.channel.common.result.BaseResult;
 import com.yunny.channel.common.vo.UserBaseInfoVo;
+import com.yunny.channel.common.util.excel.constant.UserBaseInfoExcel;
 
 import java.util.List;
 
@@ -16,6 +18,13 @@ public interface UserBaseInfoService {
      * @return
      */
     List<UserBaseInfoVo> selectUserBaseInfoList(UserBaseInfoQuery userBaseInfoQuery);
+
+    /**
+     * 登录用户查询
+     * @param query
+     * @return
+     */
+    List<UserBaseInfoVo>  queryUserBaseInfoDOList(LoginUserQuery query);
 
     /**
      * 分页查询
@@ -33,5 +42,15 @@ public interface UserBaseInfoService {
      * @return
      */
     BaseResult testSendMq(String userNo);
+
+    /**
+     * 多线程处理数据
+     * @param count
+     * @return
+     */
+    BaseResult testExecutorStr(int count);
+
+
+    List<UserBaseInfoExcel> findList(UserBaseInfoQuery query);
 
 }

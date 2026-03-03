@@ -1,6 +1,5 @@
 package com.yunny.channel.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yunny.channel.common.constant.ExceptionConstants;
 import com.yunny.channel.common.constant.UserBaseInfoConstant;
@@ -8,27 +7,35 @@ import com.yunny.channel.common.dto.RedisLockDTO;
 import com.yunny.channel.common.entity.UserBaseInfoDO;
 import com.yunny.channel.common.page.CommonPager;
 import com.yunny.channel.common.page.PageParameter;
+import com.yunny.channel.common.query.LoginUserQuery;
 import com.yunny.channel.common.query.TestMqQuery;
 import com.yunny.channel.common.query.UserBaseInfoQuery;
 import com.yunny.channel.common.result.BaseResult;
+import com.yunny.channel.common.tools.redis.RedisService;
 import com.yunny.channel.common.vo.UserBaseInfoVo;
+import com.yunny.channel.common.util.excel.constant.UserBaseInfoExcel;
 import com.yunny.channel.mapper.UserBaseInfoMapper;
 import com.yunny.channel.rabbitmq.sender.TestSender;
-import com.yunny.channel.redis.service.RedisService;
+import com.yunny.channel.service.TestExecutor;
 import com.yunny.channel.service.UserBaseInfoService;
 import com.yunny.channel.util.RedisLockUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
-
+/**
+ * Created by Fe
+ * Service注解给类起名称name 注入的时候可以根据name注入
+ */
 @Slf4j
-@Service
+@Service("UserBaseInfoService1")
 public class UserBaseInfoServiceImpl implements UserBaseInfoService {
 
     @Autowired
@@ -43,6 +50,9 @@ public class UserBaseInfoServiceImpl implements UserBaseInfoService {
 
     @Autowired
     TestSender testSender;
+
+    @Autowired
+    TestExecutor testExecutor;
 
     private final String REDIS_KEY = "CESHI:RDIS:TEST";
 
@@ -70,6 +80,33 @@ public class UserBaseInfoServiceImpl implements UserBaseInfoService {
         });
 
         return ubiVo;
+    }
+
+    @Override
+    public  List<UserBaseInfoVo> queryUserBaseInfoDOList(LoginUserQuery query) {
+        List<UserBaseInfoDO> ubiDoList = userBaseInfoMapper.queryUserBaseInfoDOList(query);
+
+        List<UserBaseInfoVo> ubiVoList = new ArrayList<>();
+        if(CollectionUtils.isEmpty(ubiDoList)){
+
+           return null;
+        }
+
+        ubiDoList.forEach( p -> {
+            UserBaseInfoVo vo = new UserBaseInfoVo();
+            vo.setMobile(p.getMobile());
+            vo.setPassword(p.getPassword());
+            vo.setState(p.getState());
+            vo.setUserEmail(p.getUserEmail());
+            vo.setUserName(p.getUserName());
+            vo.setUserNickName(p.getUserNickName());
+            vo.setUserPicture(p.getUserPicture());
+            vo.setUserNo(p.getUserNo());
+            vo.setId(p.getId());
+            ubiVoList.add(vo);
+        });
+
+        return ubiVoList;
     }
 
     @Override
@@ -116,8 +153,7 @@ public class UserBaseInfoServiceImpl implements UserBaseInfoService {
 
         try{
 
-            //请求MQ获取值
-
+            //请求redis获取值
            String rediValue = redisService.getStringKey(REDIS_KEY);
 
             //向MQ发送消息
@@ -143,6 +179,45 @@ public class UserBaseInfoServiceImpl implements UserBaseInfoService {
         }
     }
 
+    @Override
+    public BaseResult testExecutorStr(int count) {
+
+        Integer successCount = 0;
+        for(int i = 0 ;i<=count;i++){
+
+            try {
+                Future<BaseResult> future = testExecutor.testExecutor("这是第：[{"+count+"}],条数据！");
+                BaseResult result = (BaseResult) future.get();
+                if (result.getCode() != ExceptionConstants.RESULT_CODE_SUCCESS || result.getData() == null) {
+                    log.info("code:[{}],msg:[{}]",result.getCode(),result.getMessage());
+                    continue;
+                }else {
+
+                    successCount++;
+                }
+
+
+            } catch (Exception e) {
+                log.error("处理数据发送错误！msg:[{}]",e.getMessage());
+                continue;
+            }
+        }
+        return BaseResult.success(successCount);
+    }
+
+    /**
+     * 导出Excel
+     * @param query
+     * @return
+     */
+    @Override
+    public List<UserBaseInfoExcel> findList(UserBaseInfoQuery query) {
+        List<UserBaseInfoExcel> retentionRateExcel = userBaseInfoMapper.listByQuery(query)
+                .stream()
+                .map(UserBaseInfoExcel::builder)
+                .collect(Collectors.toList());
+        return retentionRateExcel;
+    }
 
     private void  assignConvertAndSend( TestMqQuery aavq){
         String assignVmStr = JSONObject.toJSONString(aavq);

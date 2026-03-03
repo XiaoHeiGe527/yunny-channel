@@ -10,7 +10,6 @@ public interface RequestBasicsAPIService {
      * 查询虚机是否有库存
      * @param req
      * @return
-     *
      */
     BaseResult<VmIsExistAPI> queryvmIsExistByApi(VmClientReq req);
 }

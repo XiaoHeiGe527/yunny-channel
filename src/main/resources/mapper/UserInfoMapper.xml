@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.UserInfoMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.UserInfoDO">
+             <id column="id" jdbcType="BIGINT" property="id"/>
+             <id column="user_no" jdbcType="VARCHAR" property="userNo"/>
+             <id column="user_name" jdbcType="VARCHAR" property="userName"/>
+             <id column="user_nick_name" jdbcType="VARCHAR" property="userNickName"/>
+             <id column="password" jdbcType="VARCHAR" property="password"/>
+             <id column="mobile" jdbcType="VARCHAR" property="mobile"/>
+             <id column="user_picture" jdbcType="VARCHAR" property="userPicture"/>
+             <id column="user_email" jdbcType="VARCHAR" property="userEmail"/>
+             <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+             <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+             <id column="state" jdbcType="INTEGER" property="state"/>
+             <id column="sex" jdbcType="TINYINT" property="sex"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            user_no,
+            user_name,
+            user_nick_name,
+            password,
+            mobile,
+            user_picture,
+            user_email,
+            create_time,
+            update_time,
+            state,
+            sex
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.UserInfoQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from user_info
+     </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.UserInfoQuery" resultType="java.lang.Long">
+       select count(*) from user_info
+     </select>
+
+     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from user_info
+         where id = #{id}
+    </select>
+
+
+    <!-- 新增表user_info信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.UserInfoDO">
+        insert into user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="userNo != null and userNo != ''">
+                        user_no,
+                    </if>
+                    <if test="userName != null and userName != ''">
+                        user_name,
+                    </if>
+                    <if test="userNickName != null and userNickName != ''">
+                        user_nick_name,
+                    </if>
+                    <if test="password != null and password != ''">
+                        password,
+                    </if>
+                    <if test="mobile != null and mobile != ''">
+                        mobile,
+                    </if>
+                    <if test="userPicture != null and userPicture != ''">
+                        user_picture,
+                    </if>
+                    <if test="userEmail != null and userEmail != ''">
+                        user_email,
+                    </if>
+                    <if test="createTime != null">
+                        create_time,
+                    </if>
+                    <if test="updateTime != null">
+                        update_time,
+                    </if>
+                    <if test="state != null">
+                        state,
+                    </if>
+                    <if test="sex != null">
+                        sex,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="userNo != null and userNo != ''">
+                    #{userNo},
+                </if>
+                <if test="userName != null and userName != ''">
+                    #{userName},
+                </if>
+                <if test="userNickName != null and userNickName != ''">
+                    #{userNickName},
+                </if>
+                <if test="password != null and password != ''">
+                    #{password},
+                </if>
+                <if test="mobile != null and mobile != ''">
+                    #{mobile},
+                </if>
+                <if test="userPicture != null and userPicture != ''">
+                    #{userPicture},
+                </if>
+                <if test="userEmail != null and userEmail != ''">
+                    #{userEmail},
+                </if>
+                <if test="createTime != null">
+                    #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    #{updateTime},
+                </if>
+                <if test="state != null">
+                    #{state},
+                </if>
+                <if test="sex != null">
+                    #{sex},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.UserInfoDO">
+        UPDATE user_info
+        <set>
+                <if test="userNo != null and userNo != ''">
+                    user_no = #{userNo},
+                </if>
+                <if test="userName != null and userName != ''">
+                    user_name = #{userName},
+                </if>
+                <if test="userNickName != null and userNickName != ''">
+                    user_nick_name = #{userNickName},
+                </if>
+                <if test="password != null and password != ''">
+                    password = #{password},
+                </if>
+                <if test="mobile != null and mobile != ''">
+                    mobile = #{mobile},
+                </if>
+                <if test="userPicture != null and userPicture != ''">
+                    user_picture = #{userPicture},
+                </if>
+                <if test="userEmail != null and userEmail != ''">
+                    user_email = #{userEmail},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime},
+                </if>
+                <if test="state != null">
+                    state = #{state},
+                </if>
+                <if test="sex != null">
+                    sex = #{sex},
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 批量新增表user_info信息 -->
+    <insert id="batchInsertSelective" parameterType="com.yunny.channel.common.entity.UserInfoDO">
+        INSERT INTO user_info(
+        id,
+        user_no,
+        user_name,
+        user_nick_name,
+        password,
+        mobile,
+        user_picture,
+        user_email,
+        state
+        )VALUES
+        <foreach collection="list" item="element" index="index" separator=",">
+            (
+            #{element.id,jdbcType=BIGINT},
+            #{element.userNo,jdbcType=VARCHAR},
+            #{element.userName,jdbcType=VARCHAR},
+            #{element.userNickName,jdbcType=INTEGER},
+            #{element.password,jdbcType=VARCHAR},
+            #{element.mobile,jdbcType=VARCHAR},
+            #{element.userPicture,jdbcType=VARCHAR},
+            #{element.userEmail,jdbcType=VARCHAR},
+            #{element.state,jdbcType=INTEGER}
+            )
+        </foreach>
+
+    </insert>
+
+</mapper>

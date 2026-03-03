@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.SystemUserDepartmentMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.SystemUserDepartmentDO">
+             <id column="id" jdbcType="BIGINT" property="id"/>
+             <id column="user_no" jdbcType="VARCHAR" property="userNo"/>
+             <id column="dept_code" jdbcType="VARCHAR" property="deptCode"/>
+             <id column="is_main" jdbcType="TINYINT" property="isMainDept"/>
+             <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+             <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            user_no,
+            dept_code,
+            is_main,
+            create_time,
+            update_time
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.SystemUserDepartmentQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from system_user_department
+     </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.SystemUserDepartmentQuery" resultType="java.lang.Long">
+       select count(*) from system_user_department
+     </select>
+
+     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from system_user_department
+         where id = #{id}
+    </select>
+
+
+    <!-- 新增表system_user_department信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.SystemUserDepartmentDO">
+        insert into system_user_department
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="userNo != null and userNo != ''">
+                        user_no,
+                    </if>
+                    <if test="deptCode != null and deptCode != ''">
+                        dept_code,
+                    </if>
+                    <if test="isMain != null">
+                        is_main,
+                    </if>
+                    <if test="createTime != null">
+                        create_time,
+                    </if>
+                    <if test="updateTime != null">
+                        update_time,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="userNo != null and userNo != ''">
+                    #{userNo},
+                </if>
+                <if test="deptCode != null and deptCode != ''">
+                    #{deptCode},
+                </if>
+                <if test="isMain != null">
+                    #{isMain},
+                </if>
+                <if test="createTime != null">
+                    #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    #{updateTime},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.SystemUserDepartmentDO">
+        UPDATE system_user_department
+        <set>
+                <if test="userNo != null and userNo != ''">
+                    user_no = #{userNo},
+                </if>
+                <if test="deptCode != null and deptCode != ''">
+                    dept_code = #{deptCode},
+                </if>
+                <if test="isMain != null">
+                    is_main = #{isMain},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime},
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+    <resultMap id="SystemUserDepartmentBaseResultMap" type="com.yunny.channel.common.entity.SystemUserDepartmentDO">
+        <id column="user_no" jdbcType="VARCHAR" property="userNo"/>
+        <id column="dept_code" jdbcType="VARCHAR" property="deptCode"/>
+        <id column="is_main" jdbcType="TINYINT" property="isMainDept"/>
+        <id column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <id column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <id column="dept_name" jdbcType="VARCHAR" property="deptName"/>
+        <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+
+    <select id="listByUserDepartment" parameterType="com.yunny.channel.common.query.SystemUserDepartmentQuery" resultMap="SystemUserDepartmentBaseResultMap">
+
+
+SELECT
+  su.user_no AS user_no,
+  su.name AS user_name,
+  su.login_name,
+  d.content AS dept_name,
+  sud.is_main AS is_main_dept
+FROM
+  system_user su
+LEFT JOIN
+  system_user_department sud ON su.user_no = sud.user_no
+LEFT JOIN
+  dictionary d ON sud.dept_code = d.code_num AND d.category = '部门'
+
+        <where>
+        1=1
+
+            <if test="userNo!=null">
+                and su.user_no = #{userNo,jdbcType=VARCHAR}
+
+            </if>
+
+            <if test="isMainDept != null">
+                and  sud.is_main = #{isMainDept,jdbcType=TINYINT}
+
+            </if>
+
+        </where>
+
+
+    </select>
+
+</mapper>

@@ -1,0 +1,141 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    padding: 20px;
+}
+
+.layui-container {
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+table th,
+table td {
+    border: 1px solid #e6e6e6;
+    padding: 10px 15px;
+    text-align: center;
+}
+
+table th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+}
+
+.layui-laypage {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.layui-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #ffffff;
+}
+
+.layui-card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.layui-card-body {
+    padding: 20px;
+}
+
+.query-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.query-form input,
+.query-form button {
+    height: 38px;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+    padding: 0 10px;
+    transition: border-color 0.3s ease;
+}
+
+.query-form input:focus,
+.query-form button:focus {
+    border-color: #1890ff;
+    outline: none;
+}
+
+.query-form button {
+    background-color: #1890ff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.query-form button:hover {
+    background-color: #40a9ff;
+}
+
+.layui-btn-group {
+    margin-bottom: 20px;
+}
+
+.nav a {
+    color: #1890ff;
+    text-decoration: none;
+    margin-left: 15px;
+    transition: color 0.3s ease;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+    color: #40a9ff;
+}
+
+.handle-btn {
+    background-color: #1890ff;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px; /* 按钮间的右边距 */
+    transition: background-color 0.3s ease;
+}
+
+.handle-btn:hover {
+    background-color: #40a9ff;
+}
+
+.handle-btn:last-child {
+    margin-right: 0; /* 最后一个按钮去掉右边距 */
+}
+
+.amount-display {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-left: auto;
+}
+
+.hidden {
+    display: none;
+}

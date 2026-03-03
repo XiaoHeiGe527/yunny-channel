@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TestListener {
 
-    @RabbitListener(queues = RabbitMQConfig.TEST_QUEUE_NAME)
+   // @RabbitListener(queues = RabbitMQConfig.TEST_QUEUE_NAME)
     public void testDemoListener(String testStr){
 
         if(StringUtil.isEmpty(testStr)){
@@ -22,7 +22,7 @@ public class TestListener {
         }
 
         log.info(" MQ接收的 testStr :[{}]",testStr);
-
+        //JSON转换JAVA对象
         TestMqQuery tmq = JSON.parseObject(testStr,TestMqQuery.class);
 
         log.info("TestMqQuery:[{}]",tmq.toString());

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.MaterialPlanApprovalRecordMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.MaterialPlanApprovalRecordDO">
+             <id column="record_id" jdbcType="BIGINT" property="recordId"/>
+             <id column="plan_no" jdbcType="VARCHAR" property="planNo"/>
+             <id column="node_id" jdbcType="INTEGER" property="nodeId"/>
+             <id column="approver_no" jdbcType="VARCHAR" property="approverNo"/>
+             <id column="approval_result" jdbcType="TINYINT" property="approvalResult"/>
+             <id column="skip_flag" jdbcType="TINYINT" property="skipFlag"/>
+             <id column="skip_reason" jdbcType="VARCHAR" property="skipReason"/>
+             <id column="approval_opinion" jdbcType="VARCHAR" property="approvalOpinion"/>
+             <id column="approval_time" jdbcType="TIMESTAMP" property="approvalTime"/>
+             <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            record_id,
+            plan_no,
+            node_id,
+            approver_no,
+            approval_result,
+            skip_flag,
+            skip_reason,
+            approval_opinion,
+            approval_time,
+            create_time
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.MaterialPlanApprovalRecordQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from material_plan_approval_record
+     </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.MaterialPlanApprovalRecordQuery" resultType="java.lang.Long">
+       select count(*) from material_plan_approval_record
+     </select>
+
+
+
+    <!-- 新增表material_plan_approval_record信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.MaterialPlanApprovalRecordDO">
+        insert into material_plan_approval_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="recordId != null">
+                        record_id,
+                    </if>
+                    <if test="planNo != null and planNo != ''">
+                        plan_no,
+                    </if>
+                    <if test="nodeId != null">
+                        node_id,
+                    </if>
+                    <if test="approverNo != null and approverNo != ''">
+                        approver_no,
+                    </if>
+                    <if test="approvalResult != null">
+                        approval_result,
+                    </if>
+                    <if test="skipFlag != null">
+                        skip_flag,
+                    </if>
+                    <if test="skipReason != null and skipReason != ''">
+                        skip_reason,
+                    </if>
+                    <if test="approvalOpinion != null and approvalOpinion != ''">
+                        approval_opinion,
+                    </if>
+                    <if test="approvalTime != null">
+                        approval_time,
+                    </if>
+                    <if test="createTime != null">
+                        create_time,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="recordId != null">
+                    #{recordId},
+                </if>
+                <if test="planNo != null and planNo != ''">
+                    #{planNo},
+                </if>
+                <if test="nodeId != null">
+                    #{nodeId},
+                </if>
+                <if test="approverNo != null and approverNo != ''">
+                    #{approverNo},
+                </if>
+                <if test="approvalResult != null">
+                    #{approvalResult},
+                </if>
+                <if test="skipFlag != null">
+                    #{skipFlag},
+                </if>
+                <if test="skipReason != null and skipReason != ''">
+                    #{skipReason},
+                </if>
+                <if test="approvalOpinion != null and approvalOpinion != ''">
+                    #{approvalOpinion},
+                </if>
+                <if test="approvalTime != null">
+                    #{approvalTime},
+                </if>
+                <if test="createTime != null">
+                    #{createTime},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.MaterialPlanApprovalRecordDO">
+        UPDATE material_plan_approval_record
+        <set>
+                <if test="recordId != null">
+                    record_id = #{recordId},
+                </if>
+                <if test="planNo != null and planNo != ''">
+                    plan_no = #{planNo},
+                </if>
+                <if test="nodeId != null">
+                    node_id = #{nodeId},
+                </if>
+                <if test="approverNo != null and approverNo != ''">
+                    approver_no = #{approverNo},
+                </if>
+                <if test="approvalResult != null">
+                    approval_result = #{approvalResult},
+                </if>
+                <if test="skipFlag != null">
+                    skip_flag = #{skipFlag},
+                </if>
+                <if test="skipReason != null and skipReason != ''">
+                    skip_reason = #{skipReason},
+                </if>
+                <if test="approvalOpinion != null and approvalOpinion != ''">
+                    approval_opinion = #{approvalOpinion},
+                </if>
+                <if test="approvalTime != null">
+                    approval_time = #{approvalTime},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime},
+                </if>
+        </set>
+    </update>
+
+
+</mapper>

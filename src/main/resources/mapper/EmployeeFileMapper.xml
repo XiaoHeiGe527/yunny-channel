@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.EmployeeFileMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.EmployeeFileDO">
+             <id column="id" jdbcType="BIGINT" property="id"/>
+             <id column="employee_code" jdbcType="VARCHAR" property="employeeCode"/>
+             <id column="name" jdbcType="VARCHAR" property="name"/>
+             <id column="department" jdbcType="VARCHAR" property="department"/>
+             <id column="rank" jdbcType="VARCHAR" property="rank"/>
+             <id column="profession" jdbcType="VARCHAR" property="profession"/>
+             <id column="position_code" jdbcType="VARCHAR" property="positionCode"/>
+             <id column="state" jdbcType="INTEGER" property="state"/>
+             <id column="remarks" jdbcType="VARCHAR" property="remarks"/>
+             <id column="position_code_remarks" jdbcType="VARCHAR" property="positionCodeRemarks"/>
+             <id column="pdf_file_url" jdbcType="VARCHAR" property="pdfFileUrl"/>
+             <id column="update_man" jdbcType="VARCHAR" property="updateMan"/>
+             <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+             <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            employee_code,
+            name,
+            department,
+            rank,
+            profession,
+            position_code,
+            state,
+            remarks,
+            pdf_file_url,
+            update_man,
+            update_time,
+            create_time
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.EmployeeFileQuery" resultMap="BaseResultMap">
+        select
+        a.id,
+        a.employee_code,
+        a.name,
+        a.department,
+        a.rank,
+        a.profession,
+        a.position_code,
+        a.state,
+        a.remarks,
+        a.pdf_file_url,
+        a.update_man,
+        a.update_time,
+        a.create_time,
+        b.remarks as  position_code_remarks
+        from employee_file a
+        LEFT JOIN file_position b
+        ON a.position_code = b. position_code
+
+        WHERE 1= 1
+
+        <if test="employeeCode != null and  employeeCode != ''">
+            and employee_code like  "%"#{employeeCode,jdbcType=VARCHAR}"%"
+        </if>
+
+            <if test="name != null and  name != ''">
+            and name like  "%"#{name,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="department != null and department != ''">
+            and department = #{department}
+        </if>
+
+        <if test="rank != null and rank != ''">
+            and rank = #{rank}
+        </if>
+
+        <if test="profession != null and profession != ''">
+
+            and profession like "%"#{profession,jdbcType=VARCHAR}"%"
+
+        </if>
+
+        <if test="state != null">
+            and  state = #{state}
+        </if>
+
+        ORDER BY
+        CAST(SUBSTRING_INDEX(employee_code, '-', 1) AS UNSIGNED),
+        CAST(SUBSTRING_INDEX(employee_code, '-', -1) AS UNSIGNED)
+
+        <if test="pageParameter!=null">
+            LIMIT #{pageParameter.offset}, #{pageParameter.pageSize}
+        </if>
+
+
+    </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.EmployeeFileQuery" resultType="java.lang.Long">
+       select count(*)
+
+         from employee_file a
+         LEFT JOIN file_position b
+         ON a.position_code = b. position_code
+
+         WHERE 1= 1
+
+         <if test="employeeCode != null and  employeeCode != ''">
+             and employee_code like  "%"#{employeeCode,jdbcType=VARCHAR}"%"
+         </if>
+
+         <if test="employeeCodeOnly != null">
+             and  employee_code = #{employeeCodeOnly}
+         </if>
+
+
+         <if test="name != null and  name != ''">
+             and name like  "%"#{name,jdbcType=VARCHAR}"%"
+         </if>
+
+         <if test="department != null and department != ''">
+             and department = #{department}
+         </if>
+
+         <if test="rank != null and rank != ''">
+             and rank = #{rank}
+         </if>
+
+         <if test="profession != null and profession != ''">
+
+             and profession like  "%"#{profession,jdbcType=VARCHAR}"%"
+
+         </if>
+
+         <if test="state != null">
+             and  state = #{state}
+         </if>
+     </select>
+
+
+
+
+    <select id="getnameCount" parameterType="com.yunny.channel.common.query.EmployeeFileQuery" resultType="java.lang.Long">
+        select count(*)
+
+        from employee_file a
+        LEFT JOIN file_position b
+        ON a.position_code = b. position_code
+
+        WHERE 1= 1
+
+        <if test="name != null and  name != ''">
+
+            and   name = #{name}
+
+        </if>
+
+
+
+    </select>
+
+
+
+
+
+
+     <select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from employee_file
+         where id = #{id}
+    </select>
+
+
+    <!-- 新增表employee_file信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.EmployeeFileDO">
+        insert into employee_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="employeeCode != null and employeeCode != ''">
+                        employee_code,
+                    </if>
+                    <if test="name != null and name != ''">
+                        name,
+                    </if>
+                    <if test="department != null and department != ''">
+                        department,
+                    </if>
+                    <if test="rank != null and rank != ''">
+                        rank,
+                    </if>
+                    <if test="profession != null and profession != ''">
+                        profession,
+                    </if>
+                    <if test="positionCode != null and positionCode != ''">
+                        position_code,
+                    </if>
+                    <if test="state != null">
+                        state,
+                    </if>
+                    <if test="remarks != null and remarks != ''">
+                        remarks,
+                    </if>
+                    <if test="pdfFileUrl != null and pdfFileUrl != ''">
+                        pdf_file_url,
+                    </if>
+                    <if test="updateMan != null and updateMan != ''">
+                        update_man,
+                    </if>
+                    <if test="updateTime != null">
+                        update_time,
+                    </if>
+                    <if test="createTime != null">
+                        create_time,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="employeeCode != null and employeeCode != ''">
+                    #{employeeCode},
+                </if>
+                <if test="name != null and name != ''">
+                    #{name},
+                </if>
+                <if test="department != null and department != ''">
+                    #{department},
+                </if>
+                <if test="rank != null and rank != ''">
+                    #{rank},
+                </if>
+                <if test="profession != null and profession != ''">
+                    #{profession},
+                </if>
+                <if test="positionCode != null and positionCode != ''">
+                    #{positionCode},
+                </if>
+                <if test="state != null">
+                    #{state},
+                </if>
+                <if test="remarks != null and remarks != ''">
+                    #{remarks},
+                </if>
+                <if test="pdfFileUrl != null and pdfFileUrl != ''">
+                    #{pdfFileUrl},
+                </if>
+                <if test="updateMan != null and updateMan != ''">
+                    #{updateMan},
+                </if>
+                <if test="updateTime != null">
+                    #{updateTime},
+                </if>
+                <if test="createTime != null">
+                    #{createTime},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.EmployeeFileDO">
+        UPDATE employee_file
+        <set>
+                <if test="employeeCode != null and employeeCode != ''">
+                    employee_code = #{employeeCode},
+                </if>
+                <if test="name != null and name != ''">
+                    name = #{name},
+                </if>
+                <if test="department != null and department != ''">
+                    department = #{department},
+                </if>
+                <if test="rank != null and rank != ''">
+                    rank = #{rank},
+                </if>
+                <if test="profession != null and profession != ''">
+                    profession = #{profession},
+                </if>
+                <if test="positionCode != null and positionCode != ''">
+                    position_code = #{positionCode},
+                </if>
+                <if test="state != null">
+                    state = #{state},
+                </if>
+                <if test="remarks != null and remarks != ''">
+                    remarks = #{remarks},
+                </if>
+                <if test="pdfFileUrl != null and pdfFileUrl != ''">
+                    pdf_file_url = #{pdfFileUrl},
+                </if>
+                <if test="updateMan != null and updateMan != ''">
+                    update_man = #{updateMan},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime},
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <select id="countByEmployeeCode" parameterType="com.yunny.channel.common.query.EmployeeFileQuery" resultType="java.lang.Long">
+        select count(*) from employee_file
+        where employee_code = #{query.employeeCode,jdbcType=VARCHAR}
+        <if test="query.excludeId != null">
+            and id != #{query.excludeId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+</mapper>

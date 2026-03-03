@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.ChemicalFileImagesMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.ChemicalFileImagesDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <id column="chemical_file_id" jdbcType="BIGINT" property="chemicalFileId"/>
+        <id column="image_url" jdbcType="VARCHAR" property="imageUrl"/>
+        <id column="image_path" jdbcType="VARCHAR" property="imagePath"/>
+        <id column="page_num" jdbcType="INTEGER" property="pageNum"/>
+        <id column="image_format" jdbcType="VARCHAR" property="imageFormat"/>
+        <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+            id,
+            chemical_file_id,
+            image_url,
+            image_path,
+            page_num,
+            image_format,
+            create_time
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.ChemicalFileImagesQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from chemical_file_images
+
+        where 1 = 1
+        <if test="chemicalFileId != null and  chemicalFileId != ''">
+            and chemical_file_id = #{chemicalFileId}
+        </if>
+
+
+    </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.ChemicalFileImagesQuery" resultType="java.lang.Long">
+       select count(*) from chemical_file_images
+     </select>
+
+     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from chemical_file_images
+         where id = #{id}
+    </select>
+
+    <!-- 新增表chemical_file_images信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.ChemicalFileImagesDO">
+        insert into chemical_file_images
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chemicalFileId != null">
+                chemical_file_id,
+            </if>
+            <if test="imageUrl != null and imageUrl != ''">
+                image_url,
+            </if>
+            <if test="imagePath != null and imagePath != ''">
+                image_path,
+            </if>
+            <if test="pageNum != null">
+                page_num,
+            </if>
+            <if test="imageFormat != null and imageFormat != ''">
+                image_format,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chemicalFileId != null">
+                #{chemicalFileId},
+            </if>
+            <if test="imageUrl != null and imageUrl != ''">
+                #{imageUrl},
+            </if>
+            <if test="imagePath != null and imagePath != ''">
+                #{imagePath},
+            </if>
+            <if test="pageNum != null">
+                #{pageNum},
+            </if>
+            <if test="imageFormat != null and imageFormat != ''">
+                #{imageFormat},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.ChemicalFileImagesDO">
+        UPDATE chemical_file_images
+        <set>
+            <if test="chemicalFileId != null">
+                chemical_file_id = #{chemicalFileId},
+            </if>
+            <if test="imageUrl != null and imageUrl != ''">
+                image_url = #{imageUrl},
+            </if>
+            <if test="imagePath != null and imagePath != ''">
+                image_path = #{imagePath},
+            </if>
+            <if test="pageNum != null">
+                page_num = #{pageNum},
+            </if>
+            <if test="imageFormat != null and imageFormat != ''">
+                image_format = #{imageFormat},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

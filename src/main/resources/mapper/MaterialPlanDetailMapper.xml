@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.MaterialPlanDetailMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.MaterialPlanDetailDO">
+             <id column="id" jdbcType="BIGINT" property="id"/>
+             <id column="plan_no" jdbcType="VARCHAR" property="planNo"/>
+             <id column="material_name" jdbcType="VARCHAR" property="materialName"/>
+             <id column="specification" jdbcType="VARCHAR" property="specification"/>
+             <id column="quantity" jdbcType="INTEGER" property="quantity"/>
+             <id column="unit" jdbcType="VARCHAR" property="unit"/>
+             <id column="unit_price" jdbcType="DECIMAL" property="unitPrice"/>
+             <id column="amount" jdbcType="DECIMAL" property="amount"/>
+             <id column="remark" jdbcType="VARCHAR" property="remark"/>
+             <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+             <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            plan_no,
+            material_name,
+            specification,
+            quantity,
+            unit,
+            unit_price,
+            amount,
+            remark,
+            create_time,
+            update_time
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.MaterialPlanDetailQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from material_plan_detail
+     </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.MaterialPlanDetailQuery" resultType="java.lang.Long">
+       select count(*) from material_plan_detail
+     </select>
+
+
+    <!-- 新增表material_plan_detail信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.MaterialPlanDetailDO">
+        insert into material_plan_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="planNo != null and planNo != ''">
+                        plan_no,
+                    </if>
+                    <if test="materialName != null and materialName != ''">
+                        material_name,
+                    </if>
+                    <if test="specification != null and specification != ''">
+                        specification,
+                    </if>
+                    <if test="quantity != null">
+                        quantity,
+                    </if>
+                    <if test="unit != null and unit != ''">
+                        unit,
+                    </if>
+                    <if test="unitPrice != null">
+                        unit_price,
+                    </if>
+                    <if test="amount != null">
+                        amount,
+                    </if>
+                    <if test="remark != null and remark != ''">
+                        remark,
+                    </if>
+                    <if test="createTime != null">
+                        create_time,
+                    </if>
+                    <if test="updateTime != null">
+                        update_time,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="planNo != null and planNo != ''">
+                    #{planNo},
+                </if>
+                <if test="materialName != null and materialName != ''">
+                    #{materialName},
+                </if>
+                <if test="specification != null and specification != ''">
+                    #{specification},
+                </if>
+                <if test="quantity != null">
+                    #{quantity},
+                </if>
+                <if test="unit != null and unit != ''">
+                    #{unit},
+                </if>
+                <if test="unitPrice != null">
+                    #{unitPrice},
+                </if>
+                <if test="amount != null">
+                    #{amount},
+                </if>
+                <if test="remark != null and remark != ''">
+                    #{remark},
+                </if>
+                <if test="createTime != null">
+                    #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    #{updateTime},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.MaterialPlanDetailDO">
+        UPDATE material_plan_detail
+        <set>
+                <if test="planNo != null and planNo != ''">
+                    plan_no = #{planNo},
+                </if>
+                <if test="materialName != null and materialName != ''">
+                    material_name = #{materialName},
+                </if>
+                <if test="specification != null and specification != ''">
+                    specification = #{specification},
+                </if>
+                <if test="quantity != null">
+                    quantity = #{quantity},
+                </if>
+                <if test="unit != null and unit != ''">
+                    unit = #{unit},
+                </if>
+                <if test="unitPrice != null">
+                    unit_price = #{unitPrice},
+                </if>
+                <if test="amount != null">
+                    amount = #{amount},
+                </if>
+                <if test="remark != null and remark != ''">
+                    remark = #{remark},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime},
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <select id="listByPlanNos" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from material_plan_detail
+        where plan_no in
+        <foreach collection="planNos" item="planNo" open="(" separator="," close=")">
+            #{planNo}
+        </foreach>
+    </select>
+
+</mapper>

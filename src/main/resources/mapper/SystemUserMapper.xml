@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.SystemUserMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.SystemUserDO">
+             <id column="id" jdbcType="BIGINT" property="id"/>
+             <id column="user_no" jdbcType="VARCHAR" property="userNo"/>
+             <id column="login_name" jdbcType="VARCHAR" property="loginName"/>
+             <id column="name" jdbcType="VARCHAR" property="name"/>
+             <id column="password" jdbcType="VARCHAR" property="password"/>
+             <id column="mobile" jdbcType="VARCHAR" property="mobile"/>
+             <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+             <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+             <id column="state" jdbcType="INTEGER" property="state"/>
+             <id column="age" jdbcType="INTEGER" property="age"/>
+             <id column="city" jdbcType="VARCHAR" property="city"/>
+             <id column="email" jdbcType="VARCHAR" property="email"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            user_no,
+            login_name,
+            name,
+            password,
+            mobile,
+            create_time,
+            update_time,
+            state,
+            age,
+            city,
+            email
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.SystemUserQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from system_user
+
+        WHERE 1 = 1
+
+        <if test="loginName != null and  loginName != ''">
+            and login_name like  "%"#{loginName,jdbcType=VARCHAR}"%"
+        </if>
+
+
+        <if test="name != null and  name != ''">
+            and name like  "%"#{name,jdbcType=VARCHAR}"%"
+        </if>
+
+
+        <if test="state != null">
+            and  state = #{state}
+        </if>
+
+
+        ORDER BY  id desc
+
+        <if test="pageParameter!=null">
+            LIMIT #{pageParameter.offset}, #{pageParameter.pageSize}
+        </if>
+
+    </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.SystemUserQuery" resultType="java.lang.Long">
+       select count(*) from system_user
+
+         WHERE 1 = 1
+
+         <if test="loginName != null and  loginName != ''">
+             and login_name like  "%"#{loginName,jdbcType=VARCHAR}"%"
+         </if>
+
+
+         <if test="name != null and  name != ''">
+             and name like  "%"#{name,jdbcType=VARCHAR}"%"
+         </if>
+
+
+         <if test="state != null">
+             and  state = #{state}
+         </if>
+
+     </select>
+
+     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from system_user
+         where id = #{id}
+    </select>
+
+
+    <!-- 新增表system_user信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.SystemUserDO">
+        insert into system_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="userNo != null and userNo != ''">
+                        user_no,
+                    </if>
+                    <if test="loginName != null and loginName != ''">
+                        login_name,
+                    </if>
+                    <if test="name != null and name != ''">
+                        name,
+                    </if>
+                    <if test="password != null and password != ''">
+                        password,
+                    </if>
+                    <if test="mobile != null and mobile != ''">
+                        mobile,
+                    </if>
+                    <if test="createTime != null">
+                        create_time,
+                    </if>
+                    <if test="updateTime != null">
+                        update_time,
+                    </if>
+                    <if test="state != null">
+                        state,
+                    </if>
+                    <if test="age != null">
+                        age,
+                    </if>
+                    <if test="city != null and city != ''">
+                        city,
+                    </if>
+                    <if test="email != null and email != ''">
+                        email,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="userNo != null and userNo != ''">
+                    #{userNo},
+                </if>
+                <if test="loginName != null and loginName != ''">
+                    #{loginName},
+                </if>
+                <if test="name != null and name != ''">
+                    #{name},
+                </if>
+                <if test="password != null and password != ''">
+                    #{password},
+                </if>
+                <if test="mobile != null and mobile != ''">
+                    #{mobile},
+                </if>
+                <if test="createTime != null">
+                    #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    #{updateTime},
+                </if>
+                <if test="state != null">
+                    #{state},
+                </if>
+                <if test="age != null">
+                    #{age},
+                </if>
+                <if test="city != null and city != ''">
+                    #{city},
+                </if>
+                <if test="email != null and email != ''">
+                    #{email},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.SystemUserDO">
+        UPDATE system_user
+        <set>
+                <if test="userNo != null and userNo != ''">
+                    user_no = #{userNo},
+                </if>
+                <if test="loginName != null and loginName != ''">
+                    login_name = #{loginName},
+                </if>
+                <if test="name != null and name != ''">
+                    name = #{name},
+                </if>
+                <if test="password != null and password != ''">
+                    password = #{password},
+                </if>
+                <if test="mobile != null and mobile != ''">
+                    mobile = #{mobile},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime},
+                </if>
+                <if test="state != null">
+                    state = #{state},
+                </if>
+                <if test="age != null">
+                    age = #{age},
+                </if>
+                <if test="city != null and city != ''">
+                    city = #{city},
+                </if>
+                <if test="email != null and email != ''">
+                    email = #{email},
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="querySystemUserDOList" parameterType="com.yunny.channel.common.query.LoginUserQuery"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from system_user
+        <where>
+
+            <if test="status != null">
+                and  status = #{status,jdbcType=TINYINT}
+            </if>
+
+
+            <if test="loginName != null and loginName != '' ">
+                and login_name = #{loginName,jdbcType=VARCHAR}
+            </if>
+
+            <if test="mobile!=null and mobile!='' ">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+
+            <if test="userNo!=null">
+                and user_no = #{userNo,jdbcType=VARCHAR}
+            </if>
+
+            <if test="password != null and password!='' ">
+                and  password = #{password,jdbcType=VARCHAR}
+            </if>
+
+        </where>
+
+    </select>
+
+
+
+
+    <select id="getByUserNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from system_user
+        where user_no = #{userNo,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据用户号更新表信息 -->
+    <update id="updateByUserNo" parameterType="com.yunny.channel.common.entity.SystemUserDO">
+        UPDATE system_user
+        <set>
+            <if test="loginName != null and loginName != ''">
+                login_name = #{loginName},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="city != null and city != ''">
+                city = #{city},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+        </set>
+        where user_no = #{userNo}
+
+    </update>
+
+
+    <select id="selectByPrimaryKey" parameterType="com.yunny.channel.common.query.SystemUserQuery" resultMap="BaseResultMap">
+        select
+
+        <include refid="Base_Column_List" />
+        from system_user
+        <where>
+            <if test="userNo != null">
+                and user_no = #{userNo,jdbcType=VARCHAR}
+            </if>
+            <if test="loginName != null">
+                and login_name = #{loginName,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+
+            <if test="mobile != null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+
+
+
+        </where>
+    </select>
+
+
+
+    <!-- 根据roleId查询绑定的用户集合 -->
+    <select id="getUsersByRoleId" parameterType="java.lang.Integer" resultType="com.yunny.channel.common.entity.SystemUserDO">
+    select
+        u.*  -- 查询用户表所有字段，对应SystemUserDO实体
+    from
+        system_user u
+    inner join
+        system_user_role ur on u.user_no = ur.user_no  -- 通过user_no关联
+    where
+        ur.role_id = #{roleId}  -- 筛选指定角色ID的关联记录
+</select>
+
+
+
+
+</mapper>

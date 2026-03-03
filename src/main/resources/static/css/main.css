@@ -1,0 +1,87 @@
+.shortcut {
+
+}
+
+.panel {
+	float: left;
+	width: 20%;
+	color: #979DAF;
+	text-align: center;
+}
+
+.symbol {
+	float: left;
+	width: 35%;
+	height: 80px;
+	line-height: 80px;
+	border-radius: 5px 0px 0px 5px;
+}
+
+.symbol i {
+	font-size: 60px; 
+	color: #fff;
+}
+
+.value {
+	float: left;
+	height: 78px;
+	width: 60%;
+	border-radius: 0px 5px 5px 0px;
+	border: 1px solid #ddd;
+}
+
+.value span{
+	font-size: 30px;
+	line-height: 48px;
+}
+
+.value p{
+	font-size: 15px;
+}
+
+.shortcut-bg1 {
+	background: #1E9FFF;
+}
+
+.shortcut-bg2 {
+    background: #FF5722;
+}
+
+.shortcut-bg3 {
+    background: #009688;
+}
+
+.shortcut-bg4 {
+    background: #5FB878;
+}
+
+.shortcut-bg5 {
+    background: #F7B824;
+}
+
+.layui-accordion {
+	float: left;
+	width: 48%;
+}
+
+.layui-content {
+	padding:0;
+	height: 300px;
+	overflow: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

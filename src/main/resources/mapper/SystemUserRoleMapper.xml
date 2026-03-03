@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.SystemUserRoleMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.SystemUserRoleDO">
+             <id column="id" jdbcType="INTEGER" property="id"/>
+             <id column="user_no" jdbcType="VARCHAR" property="userNo"/>
+             <id column="role_id" jdbcType="INTEGER" property="roleId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            user_no,
+            role_id
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.SystemUserRoleQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from system_user_role
+     </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.SystemUserRoleQuery" resultType="java.lang.Long">
+       select count(*) from system_user_role
+     </select>
+
+     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from system_user_role
+         where id = #{id}
+    </select>
+
+
+    <!-- 新增表system_user_role信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.SystemUserRoleDO">
+        insert into system_user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="userNo != null and userNo != ''">
+                        user_no,
+                    </if>
+                    <if test="roleId != null">
+                        role_id,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="userNo != null and userNo != ''">
+                    #{userNo},
+                </if>
+                <if test="roleId != null">
+                    #{roleId},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.SystemUserRoleDO">
+        UPDATE system_user_role
+        <set>
+                <if test="userNo != null and userNo != ''">
+                    user_no = #{userNo},
+                </if>
+                <if test="roleId != null">
+                    role_id = #{roleId},
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <!-- 根据user_no删除记录 -->
+    <delete id="deleteByUserNo" parameterType="java.lang.String">
+        delete from system_user_role
+        where user_no = #{userNo}
+    </delete>
+
+
+
+    <!-- 根据user_no删除记录 -->
+    <delete id="deleteByRoleId" parameterType="java.lang.Integer">
+        delete from system_user_role
+        where role_id = #{roleId}
+    </delete>
+
+
+
+
+
+    <select id="getByUserNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from system_user_role
+        where user_no = #{userNo}
+
+    </select>
+
+
+    <!-- 根据roleId统计绑定的记录数 -->
+    <select id="countByRoleId" parameterType="java.lang.Integer" resultType="java.lang.Long">
+    select count(*) from system_user_role
+    where role_id = #{roleId}
+</select>
+
+
+
+
+</mapper>

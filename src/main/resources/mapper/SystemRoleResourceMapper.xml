@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.SystemRoleResourceMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.SystemRoleResourceDO">
+             <id column="id" jdbcType="INTEGER" property="id"/>
+             <id column="role_id" jdbcType="INTEGER" property="roleId"/>
+             <id column="resource_id" jdbcType="INTEGER" property="resourceId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            role_id,
+            resource_id
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.SystemRoleResourceQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from system_role_resource
+     </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.SystemRoleResourceQuery" resultType="java.lang.Long">
+       select count(*) from system_role_resource
+     </select>
+
+     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from system_role_resource
+         where id = #{id}
+    </select>
+
+
+    <!-- 新增表system_role_resource信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.SystemRoleResourceDO">
+        insert into system_role_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="roleId != null">
+                        role_id,
+                    </if>
+                    <if test="resourceId != null">
+                        resource_id,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="roleId != null">
+                    #{roleId},
+                </if>
+                <if test="resourceId != null">
+                    #{resourceId},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.SystemRoleResourceDO">
+        UPDATE system_role_resource
+        <set>
+                <if test="roleId != null">
+                    role_id = #{roleId},
+                </if>
+                <if test="resourceId != null">
+                    resource_id = #{resourceId},
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <!-- 根据role_id 角色ID删除记录 -->
+    <delete id="deleteByRoleId" parameterType="java.lang.Integer">
+        delete from system_role_resource
+        where role_id = #{roleId}
+    </delete>
+
+
+
+    <!-- 批量绑定角色与资源的关联关系  批量插入-->
+    <insert id="assignPermissions" parameterType="com.yunny.channel.common.query.SystemRoleResourceQuery">
+        insert into system_role_resource (role_id, resource_id)
+        values
+        <foreach collection="resourceId" item="item" separator=",">
+            (#{roleId}, #{item})
+        </foreach>
+    </insert>
+
+</mapper>

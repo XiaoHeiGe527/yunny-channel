@@ -4,7 +4,7 @@ import com.yunny.channel.common.constant.ExceptionConstants;
 import com.yunny.channel.common.dto.RedisLockDTO;
 import com.yunny.channel.common.exception.ServiceException;
 import com.yunny.channel.common.result.BaseResult;
-import com.yunny.channel.redis.service.RedisService;
+import com.yunny.channel.common.tools.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.VehicleInsuranceMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.VehicleInsuranceDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <id column="underwriting_date" jdbcType="TIMESTAMP" property="underwritingDate"/>
+        <id column="insured" jdbcType="VARCHAR" property="insured"/>
+        <id column="batch_no" jdbcType="VARCHAR" property="batchNo"/>
+        <id column="car_number" jdbcType="VARCHAR" property="carNumber"/>
+        <id column="car_type" jdbcType="INTEGER" property="carType" />
+        <id column="car_type_cn" jdbcType="VARCHAR" property="carTypeCn"/>
+        <id column="compulsory_insurance" jdbcType="VARCHAR" property="compulsoryInsurance"/>
+        <id column="vehicle_and_Vessel_Tax" jdbcType="VARCHAR" property="vehicleAndVesselTax"/>
+        <id column="business_tax" jdbcType="VARCHAR" property="businessTax"/>
+        <id column="non_motor_insurance" jdbcType="VARCHAR" property="nonMotorInsurance"/>
+        <id column="total" jdbcType="VARCHAR" property="total"/>
+        <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <id column="policy_expiry_alert" jdbcType="TIMESTAMP" property="policyExpiryAlert"/>
+        <id column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <id column="update_man" jdbcType="VARCHAR" property="updateMan"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            underwriting_date,
+            insured,
+            car_number,
+            car_type,
+            car_type_cn,
+            compulsory_insurance,
+            vehicle_and_Vessel_Tax,
+            business_tax,
+            non_motor_insurance,
+            total,
+            batch_no,
+            create_time,
+            update_time,
+            remarks,
+            update_man,
+            policy_expiry_alert
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.VehicleInsuranceQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from vehicle_Insurance
+
+        WHERE 1= 1
+
+        <if test="underwritingDateStart != null and  underwritingDateStart != ''">
+            AND underwriting_date <![CDATA[>=]]>  #{underwritingDateStart}
+        </if>
+        <if test="underwritingDateEnd != null and  underwritingDateEnd != ''" >
+            AND underwriting_date <![CDATA[<=]]>  #{underwritingDateEnd}
+        </if>
+
+        <if test="insured != null and  insured != ''">
+            and insured like  "%"#{insured,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="carNumber != null and  carNumber != ''">
+            and car_number like  "%"#{carNumber,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="carType != null">
+            and  car_type = #{carType}
+        </if>
+
+        <if test="batchNo != null and batchNo != ''">
+            and batch_no = #{batchNo}
+        </if>
+
+        order by policy_expiry_alert asc
+
+        <if test="pageParameter!=null">
+            LIMIT #{pageParameter.offset}, #{pageParameter.pageSize}
+        </if>
+
+    </select>
+
+    <select id="countByQuery" parameterType="com.yunny.channel.common.query.VehicleInsuranceQuery" resultType="java.lang.Long">
+        select count(*) from vehicle_Insurance
+
+        WHERE 1= 1
+
+        <if test="underwritingDateStart != null and  underwritingDateStart != ''">
+            AND underwriting_date <![CDATA[>=]]>  #{underwritingDateStart}
+        </if>
+        <if test="underwritingDateEnd != null and  underwritingDateEnd != ''" >
+            AND underwriting_date <![CDATA[<=]]>  #{underwritingDateEnd}
+        </if>
+
+        <if test="insured != null and  insured != ''">
+            and insured like  "%"#{insured,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="carNumber != null and  carNumber != ''">
+            and car_number like  "%"#{carNumber,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="carType != null">
+            and  car_type = #{carType}
+        </if>
+
+        <if test="batchNo != null and batchNo != ''">
+            and batch_no = #{batchNo}
+        </if>
+
+    </select>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from vehicle_Insurance
+        where id = #{id}
+    </select>
+
+    <!-- 新增表vehicle_Insurance信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.VehicleInsuranceDO">
+        insert into vehicle_Insurance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="underwritingDate != null">
+                underwriting_date,
+            </if>
+            <if test="insured != null and insured != ''">
+                insured,
+            </if>
+            <if test="batchNo != null and batchNo != ''">
+                batch_no,
+            </if>
+            <if test="carNumber != null and carNumber != ''">
+                car_number,
+            </if>
+            <if test="carType != null">
+                car_type,
+            </if>
+            <if test="carTypeCn != null and carTypeCn != ''">
+                car_type_cn,
+            </if>
+            <if test="compulsoryInsurance != null and compulsoryInsurance != ''">
+                compulsory_insurance,
+            </if>
+            <if test="vehicleAndVesselTax != null and vehicleAndVesselTax != ''">
+                vehicle_and_Vessel_Tax,
+            </if>
+            <if test="businessTax != null and businessTax != ''">
+                business_tax,
+            </if>
+            <if test="nonMotorInsurance != null and nonMotorInsurance != ''">
+                non_motor_insurance,
+            </if>
+            <if test="total != null and total != ''">
+                total,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="policyExpiryAlert != null">
+                policy_expiry_alert,
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks,
+            </if>
+            <if test="updateMan != null and updateMan != ''">
+                update_man,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="underwritingDate != null">
+                #{underwritingDate},
+            </if>
+            <if test="insured != null and insured != ''">
+                #{insured},
+            </if>
+            <if test="batchNo != null and batchNo != ''">
+                #{batchNo},
+            </if>
+            <if test="carNumber != null and carNumber != ''">
+                #{carNumber},
+            </if>
+            <if test="carType != null">
+                #{carType},
+            </if>
+            <if test="carTypeCn != null and carTypeCn != ''">
+                #{carTypeCn},
+            </if>
+            <if test="compulsoryInsurance != null and compulsoryInsurance != ''">
+                #{compulsoryInsurance},
+            </if>
+            <if test="vehicleAndVesselTax != null and vehicleAndVesselTax != ''">
+                #{vehicleAndVesselTax},
+            </if>
+            <if test="businessTax != null and businessTax != ''">
+                #{businessTax},
+            </if>
+            <if test="nonMotorInsurance != null and nonMotorInsurance != ''">
+                #{nonMotorInsurance},
+            </if>
+            <if test="total != null and total != ''">
+                #{total},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="policyExpiryAlert != null">
+                #{policyExpiryAlert},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                #{remarks},
+            </if>
+            <if test="updateMan != null and updateMan != ''">
+                #{updateMan},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 批量新增 vehicle_Insurance 信息 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO vehicle_Insurance
+        (
+        underwriting_date,
+        insured,
+        batch_no,
+        car_number,
+        car_type,
+        car_type_cn,
+        compulsory_insurance,
+        vehicle_and_Vessel_Tax,
+        business_tax,
+        non_motor_insurance,
+        total,
+        create_time,
+        update_time,
+        remarks,
+        update_man,
+        policy_expiry_alert
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.underwritingDate},
+            #{item.insured},
+            #{item.batchNo},
+            #{item.carNumber},
+            #{item.carType},
+            #{item.carTypeCn},
+            #{item.compulsoryInsurance},
+            #{item.vehicleAndVesselTax},
+            #{item.businessTax},
+            #{item.nonMotorInsurance},
+            #{item.total},
+            #{item.createTime},
+            #{item.updateTime},
+            #{item.remarks},
+            #{item.updateMan},
+            #{item.policyExpiryAlert}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.VehicleInsuranceDO">
+        UPDATE vehicle_Insurance
+        <set>
+            <if test="underwritingDate != null">
+                underwriting_date = #{underwritingDate},
+            </if>
+            <if test="insured != null and insured != ''">
+                insured = #{insured},
+            </if>
+            <if test="batchNo != null and batchNo != ''">
+                batch_no = #{batchNo},
+            </if>
+            <if test="carNumber != null and carNumber != ''">
+                car_number = #{carNumber},
+            </if>
+            <if test="carType != null">
+                car_type = #{carType},
+            </if>
+            <if test="carTypeCn != null and carTypeCn != ''">
+                car_type_cn = #{carTypeCn},
+            </if>
+            <if test="compulsoryInsurance != null and compulsoryInsurance != ''">
+                compulsory_insurance = #{compulsoryInsurance},
+            </if>
+            <if test="vehicleAndVesselTax != null and vehicleAndVesselTax != ''">
+                vehicle_and_Vessel_Tax = #{vehicleAndVesselTax},
+            </if>
+            <if test="businessTax != null and businessTax != ''">
+                business_tax = #{businessTax},
+            </if>
+            <if test="nonMotorInsurance != null and nonMotorInsurance != ''">
+                non_motor_insurance = #{nonMotorInsurance},
+            </if>
+            <if test="total != null and total != ''">
+                total = #{total},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="policyExpiryAlert != null">
+                policy_expiry_alert = #{policyExpiryAlert},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks},
+            </if>
+            <if test="updateMan != null">
+                update_man = #{updateMan},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="listByExpirationReminder" parameterType="com.yunny.channel.common.query.VehicleInsuranceQuery" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM vehicle_Insurance
+        WHERE policy_expiry_alert &lt;= #{expiryAlert}
+        <if test="underwritingDateStart != null and  underwritingDateStart != ''">
+            AND underwriting_date <![CDATA[>=]]>  #{underwritingDateStart}
+        </if>
+        <if test="underwritingDateEnd != null and  underwritingDateEnd != ''" >
+            AND underwriting_date <![CDATA[<=]]>  #{underwritingDateEnd}
+        </if>
+
+        <if test="insured != null and  insured != ''">
+            and insured like  "%"#{insured,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="carNumber != null and  carNumber != ''">
+            and car_number like  "%"#{carNumber,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="carType != null">
+            and  car_type = #{carType}
+        </if>
+
+        <if test="batchNo != null and batchNo != ''">
+            and batch_no = #{batchNo}
+        </if>
+
+        order by policy_expiry_alert asc
+    </select>
+
+    <select id="listAll" parameterType="com.yunny.channel.common.query.VehicleInsuranceQuery" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM vehicle_Insurance
+        WHERE  1=1
+        <if test="underwritingDateStart != null and  underwritingDateStart != ''">
+            AND underwriting_date <![CDATA[>=]]>  #{underwritingDateStart}
+        </if>
+        <if test="underwritingDateEnd != null and  underwritingDateEnd != ''" >
+            AND underwriting_date <![CDATA[<=]]>  #{underwritingDateEnd}
+        </if>
+
+        <if test="insured != null and  insured != ''">
+            and insured like  "%"#{insured,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="carNumber != null and  carNumber != ''">
+            and car_number like  "%"#{carNumber,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="batchNo != null and batchNo != ''">
+            and batch_no = #{batchNo}
+        </if>
+
+        order by policy_expiry_alert desc
+    </select>
+
+    <select id="expirationReminderCount" parameterType="com.yunny.channel.common.query.VehicleInsuranceQuery" resultType="java.lang.Long">
+        SELECT
+        count(*)
+        FROM vehicle_Insurance
+        WHERE policy_expiry_alert &lt;= #{expiryAlert}
+        <if test="batchNo != null and batchNo != ''">
+            and batch_no = #{batchNo}
+        </if>
+    </select>
+
+</mapper>

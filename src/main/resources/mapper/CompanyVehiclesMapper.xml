@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.CompanyVehiclesMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.CompanyVehiclesDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <id column="car_owner" jdbcType="VARCHAR" property="carOwner"/>
+        <id column="car_number" jdbcType="VARCHAR" property="carNumber"/>
+        <id column="car_type" jdbcType="TINYINT" property="carType"/>
+        <id column="brand" jdbcType="VARCHAR" property="brand"/>
+        <id column="model" jdbcType="VARCHAR" property="model"/>
+        <id column="oil_type" jdbcType="TINYINT" property="oilType"/>
+        <id column="purchasing_date" jdbcType="TIMESTAMP" property="purchasingDate"/>
+        <id column="car_load" jdbcType="INTEGER" property="carLoad"/>
+        <id column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <id column="address" jdbcType="VARCHAR" property="address"/>
+        <id column="active_state" jdbcType="INTEGER" property="activeState"/>
+        <id column="is_manage" jdbcType="INTEGER" property="isManage"/>
+        <id column="state" jdbcType="INTEGER" property="state"/>
+        <id column="update_man" jdbcType="VARCHAR" property="updateMan"/>
+        <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            car_owner,
+            car_number,
+            car_type,
+            brand,
+            model,
+            oil_type,
+            purchasing_date,
+            car_load,
+            remarks,
+            active_state,
+            is_manage,
+            state,
+            update_man,
+            update_time,
+            create_time
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.CompanyVehiclesQuery" resultMap="BaseResultMap">
+        SELECT
+        a.id,
+        a.car_owner,
+        a.car_number,
+        a.car_type,
+        a.brand,
+        a.model,
+        a.oil_type,
+        a.purchasing_date,
+        a.car_load,
+        a.remarks,
+        a.active_state,
+        a.is_manage,
+        a.state,
+        a.update_man,
+        a.update_time,
+        latest_customer.address,
+        a.create_time
+        FROM company_vehicles a
+        LEFT JOIN (
+        SELECT
+        b1.car_number,
+        b1.vehicle_customers_id,
+        c1.address
+        FROM vehicles_outward_card b1
+        LEFT JOIN vehicle_customers c1 ON b1.vehicle_customers_id = c1.id
+        WHERE b1.state = 3
+        AND (b1.car_number, b1.update_time) IN (
+        SELECT car_number, MAX(update_time)
+        FROM vehicles_outward_card
+        WHERE state = 3
+        GROUP BY car_number
+        )
+        ) latest_customer ON a.car_number = latest_customer.car_number
+
+        <where>
+            <!-- 原有查询条件保持不变 -->
+            <if test="carNumber != null and  carNumber != ''">
+                AND a.car_number LIKE "%"#{carNumber,jdbcType=VARCHAR}"%"
+            </if>
+
+            <if test="carOwner != null and  carOwner != ''">
+                AND a.car_owner LIKE "%"#{carOwner,jdbcType=VARCHAR}"%"
+            </if>
+
+            <if test="carType != null">
+                AND a.car_type = #{carType}
+            </if>
+
+            <if test="isManage != null">
+                AND a.is_manage = #{isManage}
+            </if>
+
+            <if test="activeState != null">
+                AND a.active_state = #{activeState}
+            </if>
+
+            <if test="state != null">
+                AND a.state = #{state}
+            </if>
+        </where>
+
+        <if test="pageParameter!=null">
+            LIMIT #{pageParameter.offset}, #{pageParameter.pageSize}
+        </if>
+    </select>
+
+    <select id="countByQuery" parameterType="com.yunny.channel.common.query.CompanyVehiclesQuery" resultType="java.lang.Long">
+       select count(*) from company_vehicles
+        WHERE  1= 1
+
+        <if test="carNumber != null and  carNumber != ''">
+            and car_number like  "%"#{carNumber,jdbcType=VARCHAR}"%"
+        </if>
+
+
+        <if test="carOwner != null and  carOwner != ''">
+            and car_owner like  "%"#{carOwner,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="carType != null">
+            and  car_type = #{carType}
+        </if>
+
+        <if test="isManage != null">
+            and   is_manage = #{isManage}
+        </if>
+
+
+        <if test="activeState != null">
+            and  active_state = #{activeState}
+        </if>
+
+        <if test="state != null">
+            and    state = #{state}
+        </if>
+
+     </select>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from company_vehicles
+        where id = #{id}
+    </select>
+
+
+    <!-- 新增表company_vehicles信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.CompanyVehiclesDO">
+        insert into company_vehicles
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carOwner != null and carOwner != ''">
+                car_owner,
+            </if>
+            <if test="carNumber != null and carNumber != ''">
+                car_number,
+            </if>
+            <if test="carType != null">
+                car_type,
+            </if>
+            <if test="brand != null and brand != ''">
+                brand,
+            </if>
+            <if test="model != null and model != ''">
+                model,
+            </if>
+            <if test="oilType != null">
+                oil_type,
+            </if>
+            <if test="purchasingDate != null">
+                purchasing_date,
+            </if>
+            <if test="carLoad != null">
+                car_load,
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks,
+            </if>
+            <if test="activeState != null">
+                active_state,
+            </if>
+            <if test="isManage != null">
+                is_manage,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="updateMan != null and updateMan != ''">
+                update_man,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carOwner != null and carOwner != ''">
+                #{carOwner},
+            </if>
+            <if test="carNumber != null and carNumber != ''">
+                #{carNumber},
+            </if>
+            <if test="carType != null">
+                #{carType},
+            </if>
+            <if test="brand != null and brand != ''">
+                #{brand},
+            </if>
+            <if test="model != null and model != ''">
+                #{model},
+            </if>
+            <if test="oilType != null">
+                #{oilType},
+            </if>
+            <if test="purchasingDate != null">
+                #{purchasingDate},
+            </if>
+            <if test="carLoad != null">
+                #{carLoad},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                #{remarks},
+            </if>
+            <if test="activeState != null">
+                #{activeState},
+            </if>
+            <if test="isManage != null">
+                #{isManage},
+            </if>
+            <if test="state != null">
+                #{state},
+            </if>
+            <if test="updateMan != null and updateMan != ''">
+                #{updateMan},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.CompanyVehiclesDO">
+        UPDATE company_vehicles
+        <set>
+            <if test="carOwner != null and carOwner != ''">
+                car_owner = #{carOwner},
+            </if>
+            <if test="carNumber != null and carNumber != ''">
+                car_number = #{carNumber},
+            </if>
+            <if test="carType != null">
+                car_type = #{carType},
+            </if>
+            <if test="brand != null and brand != ''">
+                brand = #{brand},
+            </if>
+            <if test="model != null and model != ''">
+                model = #{model},
+            </if>
+            <if test="oilType != null">
+                oil_type = #{oilType},
+            </if>
+            <if test="purchasingDate != null">
+                purchasing_date = #{purchasingDate},
+            </if>
+            <if test="carLoad != null">
+                car_load = #{carLoad},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="activeState != null">
+                active_state = #{activeState},
+            </if>
+            <if test="isManage != null">
+                is_manage = #{isManage},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="updateMan != null and updateMan != ''">
+                update_man = #{updateMan},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+    <!-- 根据车牌号更新表信息 -->
+    <update id="updateSelectiveByCarNumber" parameterType="com.yunny.channel.common.entity.CompanyVehiclesDO">
+        UPDATE company_vehicles
+        <set>
+
+            <if test="activeState != null">
+                active_state = #{activeState},
+            </if>
+            <if test="isManage != null">
+                is_manage = #{isManage},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="updateMan != null and updateMan != ''">
+                update_man = #{updateMan},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where car_number = #{carNumber}
+    </update>
+
+
+
+    <select id="countCarNumberByQuery" parameterType="com.yunny.channel.common.query.CompanyVehiclesQuery" resultType="java.lang.Long">
+        SELECT
+        count(*)
+        FROM company_vehicles
+          WHERE car_number = #{carNumber}
+     </select>
+
+
+
+    <select id="getByCarNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from company_vehicles
+        WHERE car_number = #{carNumber}
+    </select>
+
+
+    <select id="listAllByQuery" parameterType="com.yunny.channel.common.query.CompanyVehiclesQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from company_vehicles
+        WHERE  1= 1
+
+        <if test="carNumber != null and  carNumber != ''">
+            and car_number like  "%"#{carNumber,jdbcType=VARCHAR}"%"
+        </if>
+
+
+        <if test="carOwner != null and  carOwner != ''">
+            and car_owner like  "%"#{carOwner,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="carType != null">
+            and  car_type = #{carType}
+        </if>
+
+        <if test="isManage != null">
+            and   is_manage = #{isManage}
+        </if>
+
+
+        <if test="activeState != null">
+            and  active_state = #{activeState}
+        </if>
+
+
+        <if test="state != null">
+            and    state = #{state}
+        </if>
+    </select>
+
+</mapper>

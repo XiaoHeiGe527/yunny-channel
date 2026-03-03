@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.VehicleCustomersMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.VehicleCustomersDO">
+             <id column="id" jdbcType="INTEGER" property="id"/>
+             <id column="name" jdbcType="VARCHAR" property="name"/>
+             <id column="address" jdbcType="VARCHAR" property="address"/>
+             <id column="specs" jdbcType="VARCHAR" property="specs"/>
+             <id column="remark" jdbcType="VARCHAR" property="remark"/>
+             <id column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
+             <id column="serial_number" jdbcType="INTEGER" property="serialNumber"/>
+             <id column="update_man" jdbcType="VARCHAR" property="updateMan"/>
+             <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+             <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            name,
+            address,
+            specs,
+            remark,
+            phone_number,
+            serial_number,
+            update_man,
+            update_time,
+            create_time
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.VehicleCustomersQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from vehicle_customers
+
+        ORDER BY `serial_number` ASC, CONVERT(`name` USING gbk) COLLATE gbk_chinese_ci ASC;
+    </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.VehicleCustomersQuery" resultType="java.lang.Long">
+       select count(*) from vehicle_customers
+            where 1 = 1
+         <if test="name != null and  name != ''">
+             and name = #{name}
+         </if>
+
+
+     </select>
+
+     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from vehicle_customers
+         where id = #{id}
+    </select>
+
+
+    <!-- 新增表vehicle_customers信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.VehicleCustomersDO">
+        insert into vehicle_customers
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="name != null and name != ''">
+                        name,
+                    </if>
+                    <if test="address != null and address != ''">
+                        address,
+                    </if>
+                    <if test="specs != null and specs != ''">
+                        specs,
+                    </if>
+                    <if test="remark != null and remark != ''">
+                        remark,
+                    </if>
+                    <if test="phoneNumber != null and phoneNumber != ''">
+                        phone_number,
+                    </if>
+                    <if test="serialNumber != null">
+                        serial_number,
+                    </if>
+                    <if test="updateMan != null and updateMan != ''">
+                        update_man,
+                    </if>
+                    <if test="updateTime != null">
+                        update_time,
+                    </if>
+                    <if test="createTime != null">
+                        create_time,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="name != null and name != ''">
+                    #{name},
+                </if>
+                <if test="address != null and address != ''">
+                    #{address},
+                </if>
+                <if test="specs != null and specs != ''">
+                    #{specs},
+                </if>
+                <if test="remark != null and remark != ''">
+                    #{remark},
+                </if>
+                <if test="phoneNumber != null and phoneNumber != ''">
+                    #{phoneNumber},
+                </if>
+                <if test="serialNumber != null">
+                    #{serialNumber},
+                </if>
+                <if test="updateMan != null and updateMan != ''">
+                    #{updateMan},
+                </if>
+                <if test="updateTime != null">
+                    #{updateTime},
+                </if>
+                <if test="createTime != null">
+                    #{createTime},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.VehicleCustomersDO">
+        UPDATE vehicle_customers
+        <set>
+                <if test="name != null and name != ''">
+                    name = #{name},
+                </if>
+                <if test="address != null and address != ''">
+                    address = #{address},
+                </if>
+                <if test="specs != null and specs != ''">
+                    specs = #{specs},
+                </if>
+                <if test="remark != null and remark != ''">
+                    remark = #{remark},
+                </if>
+                <if test="phoneNumber != null and phoneNumber != ''">
+                    phone_number = #{phoneNumber},
+                </if>
+                <if test="serialNumber != null">
+                    serial_number = #{serialNumber},
+                </if>
+                <if test="updateMan != null and updateMan != ''">
+                    update_man = #{updateMan},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime},
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+    <select id="listAll" parameterType="com.yunny.channel.common.query.VehicleCustomersQuery" resultMap="BaseResultMap">
+
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM vehicle_customers
+        ORDER BY
+        CASE
+        WHEN serial_number IS NULL THEN 1
+        ELSE 0
+        END,
+        serial_number ASC , CONVERT(`name` USING gbk) COLLATE gbk_chinese_ci ASC;
+
+    </select>
+
+
+
+    <select id="getByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from vehicle_customers
+        where name = #{name}
+    </select>
+
+
+</mapper>

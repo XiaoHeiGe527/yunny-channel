@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.ApprovalNodeConfigMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.ApprovalNodeConfigDO">
+             <id column="node_id" jdbcType="INTEGER" property="nodeId"/>
+             <id column="flow_id" jdbcType="INTEGER" property="flowId"/>
+             <id column="node_order" jdbcType="INTEGER" property="nodeOrder"/>
+             <id column="node_name" jdbcType="VARCHAR" property="nodeName"/>
+             <id column="approver_no" jdbcType="VARCHAR" property="approverNo"/>
+             <id column="node_status" jdbcType="TINYINT" property="nodeStatus"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            node_id,
+            flow_id,
+            node_order,
+            node_name,
+            approver_no,
+            node_status
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.ApprovalNodeConfigQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from approval_node_config
+
+        <where>
+            <!-- 原有查询条件（flowId和nodeStatus） -->
+            <if test="flowId != null">
+                and flow_id = #{flowId}
+            </if>
+            <if test="nodeStatus != null">
+                and node_status = #{nodeStatus}
+            </if>
+        </where>
+        <!-- 固定排序：按节点顺序升序，不动态拼接 -->
+        order by node_order ASC
+
+
+     </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.ApprovalNodeConfigQuery" resultType="java.lang.Long">
+       select count(*) from approval_node_config
+     </select>
+
+
+
+    <!-- 新增表approval_node_config信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.ApprovalNodeConfigDO">
+        insert into approval_node_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="nodeId != null">
+                        node_id,
+                    </if>
+                    <if test="flowId != null">
+                        flow_id,
+                    </if>
+                    <if test="nodeOrder != null">
+                        node_order,
+                    </if>
+                    <if test="nodeName != null and nodeName != ''">
+                        node_name,
+                    </if>
+                    <if test="approverNo != null and approverNo != ''">
+                        approver_no,
+                    </if>
+                    <if test="nodeStatus != null">
+                        node_status,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="nodeId != null">
+                    #{nodeId},
+                </if>
+                <if test="flowId != null">
+                    #{flowId},
+                </if>
+                <if test="nodeOrder != null">
+                    #{nodeOrder},
+                </if>
+                <if test="nodeName != null and nodeName != ''">
+                    #{nodeName},
+                </if>
+                <if test="approverNo != null and approverNo != ''">
+                    #{approverNo},
+                </if>
+                <if test="nodeStatus != null">
+                    #{nodeStatus},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.ApprovalNodeConfigDO">
+        UPDATE approval_node_config
+        <set>
+                <if test="nodeId != null">
+                    node_id = #{nodeId},
+                </if>
+                <if test="flowId != null">
+                    flow_id = #{flowId},
+                </if>
+                <if test="nodeOrder != null">
+                    node_order = #{nodeOrder},
+                </if>
+                <if test="nodeName != null and nodeName != ''">
+                    node_name = #{nodeName},
+                </if>
+                <if test="approverNo != null and approverNo != ''">
+                    approver_no = #{approverNo},
+                </if>
+                <if test="nodeStatus != null">
+                    node_status = #{nodeStatus},
+                </if>
+        </set>
+    </update>
+
+
+</mapper>

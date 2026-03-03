@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.MaterialPlanMainMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.MaterialPlanMainDO">
+             <id column="id" jdbcType="BIGINT" property="id"/>
+             <id column="plan_no" jdbcType="VARCHAR" property="planNo"/>
+             <id column="plan_type" jdbcType="VARCHAR" property="planType"/>
+             <id column="apply_dept" jdbcType="VARCHAR" property="applyDept"/>
+             <id column="applicant_no" jdbcType="VARCHAR" property="applicantNo"/>
+             <id column="total_amount" jdbcType="DECIMAL" property="totalAmount"/>
+             <id column="plan_reason" jdbcType="VARCHAR" property="planReason"/>
+             <id column="plan_date" jdbcType="DATE" property="planDate"/>
+             <id column="remark" jdbcType="VARCHAR" property="remark"/>
+             <id column="plan_status" jdbcType="TINYINT" property="planStatus"/>
+             <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+             <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            plan_no,
+            plan_type,
+            apply_dept,
+            applicant_no,
+            total_amount,
+            plan_reason,
+            plan_date,
+            remark,
+            plan_status,
+            create_time,
+            update_time
+    </sql>
+
+    <!-- 分页查询主表（带筛选） -->
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.MaterialPlanMainQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from material_plan_main
+        <where>
+            <if test="planNo != null and planNo != ''">
+                and plan_no like concat('%', #{planNo}, '%')
+            </if>
+            <if test="planType != null and planType != ''">
+                and plan_type = #{planType}
+            </if>
+            <if test="applyDept != null and applyDept != ''">
+                and apply_dept = #{applyDept}
+            </if>
+            <if test="planStatus != null">
+                and plan_status = #{planStatus}
+            </if>
+            <!-- 替换 <= 为 &lt;= -->
+            <if test="startTime != null and startTime != ''">
+                and plan_date &gt;= str_to_date(#{startTime}, '%Y-%m-%d')
+            </if>
+            <!-- 替换 >= 为 &gt;= -->
+            <if test="endTime != null and endTime != ''">
+                and plan_date &lt;= str_to_date(#{endTime}, '%Y-%m-%d')
+            </if>
+        </where>
+
+        order by plan_date desc
+
+
+
+        <if test="pageParameter!=null">
+            LIMIT #{pageParameter.offset}, #{pageParameter.pageSize}
+        </if>
+
+    </select>
+
+    <!-- 总条数查询（带相同筛选条件） -->
+    <select id="countByQuery" parameterType="com.yunny.channel.common.query.MaterialPlanMainQuery" resultType="java.lang.Long">
+        select count(*) from material_plan_main
+        <where>
+            <if test="planNo != null and planNo != ''">
+                and plan_no like concat('%', #{planNo}, '%')
+            </if>
+            <if test="planType != null and planType != ''">
+                and plan_type = #{planType}
+            </if>
+            <if test="applyDept != null and applyDept != ''">
+                and apply_dept = #{applyDept}
+            </if>
+            <if test="planStatus != null">
+                and plan_status = #{planStatus}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and plan_date &gt;= str_to_date(#{startTime}, '%Y-%m-%d')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and plan_date &lt;= str_to_date(#{endTime}, '%Y-%m-%d')
+            </if>
+        </where>
+    </select>
+
+    <!-- 新增表material_plan_main信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.MaterialPlanMainDO">
+        insert into material_plan_main
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="planNo != null and planNo != ''">
+                        plan_no,
+                    </if>
+                    <if test="planType != null and planType != ''">
+                        plan_type,
+                    </if>
+                    <if test="applyDept != null and applyDept != ''">
+                        apply_dept,
+                    </if>
+                    <if test="applicantNo != null and applicantNo != ''">
+                        applicant_no,
+                    </if>
+                    <if test="totalAmount != null">
+                        total_amount,
+                    </if>
+                    <if test="planReason != null and planReason != ''">
+                        plan_reason,
+                    </if>
+                    <if test="planDate != null">
+                        plan_date,
+                    </if>
+                    <if test="remark != null and remark != ''">
+                        remark,
+                    </if>
+                    <if test="planStatus != null">
+                        plan_status,
+                    </if>
+                    <if test="createTime != null">
+                        create_time,
+                    </if>
+                    <if test="updateTime != null">
+                        update_time,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="planNo != null and planNo != ''">
+                    #{planNo},
+                </if>
+                <if test="planType != null and planType != ''">
+                    #{planType},
+                </if>
+                <if test="applyDept != null and applyDept != ''">
+                    #{applyDept},
+                </if>
+                <if test="applicantNo != null and applicantNo != ''">
+                    #{applicantNo},
+                </if>
+                <if test="totalAmount != null">
+                    #{totalAmount},
+                </if>
+                <if test="planReason != null and planReason != ''">
+                    #{planReason},
+                </if>
+                <if test="planDate != null">
+                    #{planDate},
+                </if>
+                <if test="remark != null and remark != ''">
+                    #{remark},
+                </if>
+                <if test="planStatus != null">
+                    #{planStatus},
+                </if>
+                <if test="createTime != null">
+                    #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    #{updateTime},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.MaterialPlanMainDO">
+        UPDATE material_plan_main
+        <set>
+                <if test="planNo != null and planNo != ''">
+                    plan_no = #{planNo},
+                </if>
+                <if test="planType != null and planType != ''">
+                    plan_type = #{planType},
+                </if>
+                <if test="applyDept != null and applyDept != ''">
+                    apply_dept = #{applyDept},
+                </if>
+                <if test="applicantNo != null and applicantNo != ''">
+                    applicant_no = #{applicantNo},
+                </if>
+                <if test="totalAmount != null">
+                    total_amount = #{totalAmount},
+                </if>
+                <if test="planReason != null and planReason != ''">
+                    plan_reason = #{planReason},
+                </if>
+                <if test="planDate != null">
+                    plan_date = #{planDate},
+                </if>
+                <if test="remark != null and remark != ''">
+                    remark = #{remark},
+                </if>
+                <if test="planStatus != null">
+                    plan_status = #{planStatus},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime},
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+</mapper>

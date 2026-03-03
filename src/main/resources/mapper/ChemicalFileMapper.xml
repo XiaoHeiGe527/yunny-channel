@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.ChemicalFileMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.ChemicalFileDO">
+             <id column="id" jdbcType="BIGINT" property="id"/>
+        <id column="file_type" jdbcType="VARCHAR" property="fileType"/>
+        <id column="file_type_code" jdbcType="VARCHAR" property="fileTypeCode"/>
+             <id column="type_code" jdbcType="VARCHAR" property="typeCode"/>
+             <id column="document_code" jdbcType="VARCHAR" property="documentCode"/>
+             <id column="position_code" jdbcType="VARCHAR" property="positionCode"/>
+             <id column="document_type" jdbcType="VARCHAR" property="documentType"/>
+             <id column="document_title" jdbcType="VARCHAR" property="documentTitle"/>
+             <id column="document_content" jdbcType="VARCHAR" property="documentContent"/>
+             <id column="signature_time" jdbcType="TIMESTAMP" property="signatureTime"/>
+             <id column="place_time" jdbcType="VARCHAR" property="placeTime"/>
+             <id column="expiration_date" jdbcType="TIMESTAMP" property="expirationDate"/>
+             <id column="document_describe" jdbcType="VARCHAR" property="documentDescribe"/>
+            <id column="position_code_remarks" jdbcType="VARCHAR" property="positionCodeRemarks"/>
+             <id column="remarks" jdbcType="VARCHAR" property="remarks"/>
+             <id column="pdf_file_url" jdbcType="VARCHAR" property="pdfFileUrl"/>
+             <id column="update_man" jdbcType="VARCHAR" property="updateMan"/>
+             <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+             <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+             <id column="state" jdbcType="INTEGER" property="state"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+
+            id,
+            file_type,
+            file_type_code,
+            type_code,
+            document_code,
+            position_code,
+            document_type,
+            document_title,
+            document_content,
+            signature_time,
+            place_time,
+            expiration_date,
+            document_describe,
+            remarks,
+            pdf_file_url,
+            update_man,
+            update_time,
+            create_time,
+            state
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.ChemicalFileQuery" resultMap="BaseResultMap">
+         select
+        a.id,
+        a.file_type,
+        a.file_type_code,
+        a.type_code,
+        a.document_code,
+        a.position_code,
+        a.document_type,
+        a.document_title,
+        a.document_content,
+        a.signature_time,
+        a.place_time,
+        a.expiration_date,
+        a.document_describe,
+        a.remarks,
+        a.pdf_file_url,
+        a.update_man,
+        a.update_time,
+        a.create_time,
+        b.remarks AS position_code_remarks,
+        a.state
+        from chemical_file a
+        LEFT JOIN file_position b
+        ON a.position_code = b. position_code
+
+        WHERE 1= 1
+
+        <!-- 根据fileType是否为空动态调整查询条件 -->
+        <choose>
+            <when test="fileType != null and fileType != ''">
+                and a.file_type = #{fileType}
+            </when>
+            <otherwise>
+                and a.file_type != '技术文件'
+            </otherwise>
+        </choose>
+
+        <if test="documentCode != null and  documentCode != ''">
+            and a.document_code like  "%"#{documentCode,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="documentType != null and documentType != ''">
+            and a.document_type = #{documentType}
+        </if>
+
+        <if test="documentTitle != null and  documentTitle != ''">
+            and a.document_title like  "%"#{documentTitle,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="documentContent != null and  documentContent != ''">
+            and a.document_content like  "%"#{documentContent,jdbcType=VARCHAR}"%"
+        </if>
+
+        <if test="placeTime != null and placeTime != ''">
+            and a.place_time = #{placeTime}
+        </if>
+
+        <if test="state != null">
+            and  a.state = #{state}
+        </if>
+
+        ORDER BY
+        CAST(SUBSTRING_INDEX(document_code, '-', 1) AS UNSIGNED),
+        CAST(SUBSTRING_INDEX(document_code, '-', -1) AS UNSIGNED)
+
+        <if test="pageParameter!=null">
+            LIMIT #{pageParameter.offset}, #{pageParameter.pageSize}
+        </if>
+
+    </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.ChemicalFileQuery" resultType="java.lang.Long">
+       select count(*)
+         from chemical_file a
+         LEFT JOIN file_position b
+         ON a.position_code = b. position_code
+
+         WHERE 1= 1
+
+         <!-- 根据fileType是否为空动态调整查询条件 -->
+         <choose>
+             <when test="fileType != null and fileType != ''">
+                 and a.file_type = #{fileType}
+             </when>
+             <otherwise>
+                 and a.file_type != '技术文件'
+             </otherwise>
+         </choose>
+
+         <if test="documentCode != null and  documentCode != ''">
+             and a.document_code like  "%"#{documentCode,jdbcType=VARCHAR}"%"
+         </if>
+
+         <if test="documentType != null and documentType != ''">
+             and a.document_type = #{documentType}
+         </if>
+
+         <if test="documentTitle != null and  documentTitle != ''">
+             and a.document_title like  "%"#{documentTitle,jdbcType=VARCHAR}"%"
+         </if>
+
+         <if test="documentContent != null and  documentContent != ''">
+             and a.document_content like  "%"#{documentContent,jdbcType=VARCHAR}"%"
+         </if>
+
+         <if test="placeTime != null and placeTime != ''">
+             and a.place_time = #{placeTime}
+         </if>
+
+         <if test="state != null">
+             and  a.state = #{state}
+         </if>
+
+     </select>
+
+     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from chemical_file
+         where id = #{id}
+    </select>
+
+
+    <!-- 新增表chemical_file信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.ChemicalFileDO">
+        insert into chemical_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileType != null and fileType != ''">
+                file_type,
+            </if>
+            <if test="fileTypeCode != null and fileTypeCode != ''">
+                file_type_code,
+            </if>
+            <if test="typeCode != null and typeCode != ''">
+                type_code,
+            </if>
+            <if test="documentCode != null and documentCode != ''">
+                document_code,
+            </if>
+            <if test="positionCode != null and positionCode != ''">
+                position_code,
+            </if>
+            <if test="documentType != null and documentType != ''">
+                document_type,
+            </if>
+            <if test="documentTitle != null and documentTitle != ''">
+                document_title,
+            </if>
+            <if test="documentContent != null and documentContent != ''">
+                document_content,
+            </if>
+            <if test="signatureTime != null">
+                signature_time,
+            </if>
+            <if test="placeTime != null and placeTime != ''">
+                place_time,
+            </if>
+            <if test="expirationDate != null">
+                expiration_date,
+            </if>
+            <if test="documentDescribe != null and documentDescribe != ''">
+                document_describe,
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks,
+            </if>
+            <if test="pdfFileUrl != null and pdfFileUrl != ''">
+                pdf_file_url,
+            </if>
+            <if test="updateMan != null and updateMan != ''">
+                update_man,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileType != null and fileType != ''">
+                #{fileType},
+            </if>
+            <if test="fileTypeCode != null and fileTypeCode != ''">
+                #{fileTypeCode},
+            </if>
+            <if test="typeCode != null and typeCode != ''">
+                #{typeCode},
+            </if>
+            <if test="documentCode != null and documentCode != ''">
+                #{documentCode},
+            </if>
+            <if test="positionCode != null and positionCode != ''">
+                #{positionCode},
+            </if>
+            <if test="documentType != null and documentType != ''">
+                #{documentType},
+            </if>
+            <if test="documentTitle != null and documentTitle != ''">
+                #{documentTitle},
+            </if>
+            <if test="documentContent != null and documentContent != ''">
+                #{documentContent},
+            </if>
+            <if test="signatureTime != null">
+                #{signatureTime},
+            </if>
+            <if test="placeTime != null and placeTime != ''">
+                #{placeTime},
+            </if>
+            <if test="expirationDate != null">
+                #{expirationDate},
+            </if>
+            <if test="documentDescribe != null and documentDescribe != ''">
+                #{documentDescribe},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                #{remarks},
+            </if>
+            <if test="pdfFileUrl != null and pdfFileUrl != ''">
+                #{pdfFileUrl},
+            </if>
+            <if test="updateMan != null and updateMan != ''">
+                #{updateMan},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="state != null">
+                #{state},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.ChemicalFileDO">
+        UPDATE chemical_file
+        <set>
+            <if test="fileType != null and fileType != ''">
+                file_type = #{fileType},
+            </if>
+            <if test="fileTypeCode != null and fileTypeCode != ''">
+                file_type_code = #{fileTypeCode},
+            </if>
+            <if test="typeCode != null and typeCode != ''">
+                type_code = #{typeCode},
+            </if>
+            <if test="documentCode != null and documentCode != ''">
+                document_code = #{documentCode},
+            </if>
+            <if test="positionCode != null and positionCode != ''">
+                position_code = #{positionCode},
+            </if>
+            <if test="documentType != null and documentType != ''">
+                document_type = #{documentType},
+            </if>
+            <if test="documentTitle != null and documentTitle != ''">
+                document_title = #{documentTitle},
+            </if>
+            <if test="documentContent != null and documentContent != ''">
+                document_content = #{documentContent},
+            </if>
+            <if test="signatureTime != null">
+                signature_time = #{signatureTime},
+            </if>
+            <if test="placeTime != null and placeTime != ''">
+                place_time = #{placeTime},
+            </if>
+            <if test="expirationDate != null">
+                expiration_date = #{expirationDate},
+            </if>
+            <if test="documentDescribe != null and documentDescribe != ''">
+                document_describe = #{documentDescribe},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="pdfFileUrl != null and pdfFileUrl != ''">
+                pdf_file_url = #{pdfFileUrl},
+            </if>
+            <if test="updateMan != null and updateMan != ''">
+                update_man = #{updateMan},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+</mapper>

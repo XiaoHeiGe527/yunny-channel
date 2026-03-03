@@ -1,0 +1,64 @@
+/* 核心：复用角色页面的布局样式，解决侧边栏遮挡问题 */
+/* 与角色页面保持一致的侧边栏偏移量 */
+.layui-card {
+    margin: 15px;
+    margin-left: 220px; /* 关键：200px侧边栏宽度 + 20px间距，与角色页面一致 */
+}
+
+/* 搜索表单样式（统一风格） */
+.search-form {
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+/* 按钮组样式 */
+.layui-btn-group {
+    margin-bottom: 10px;
+}
+
+/* 表单标签样式（统一宽度，避免错位） */
+.layui-form-label {
+    min-width: 90px;
+    white-space: nowrap;
+}
+
+/* 客户下拉列表样式（避免被侧边栏/内容区遮挡） */
+#customerList {
+    position: absolute;
+    z-index: 999; /* 确保在内容之上 */
+    display: none; /* 默认隐藏 */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 增加阴影，避免与侧边栏混淆 */
+}
+
+#customerList div {
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+#customerList div:hover {
+    background-color: #f5f5f5;
+}
+
+/* 隐藏列样式 */
+.hidden {
+    display: none;
+}
+
+/* 表格样式优化 */
+.layui-table th, .layui-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* 修复可能的侧边栏样式冲突（关键：确保侧边栏不被覆盖为黑色） */
+/* 假设侧边栏容器类为layui-layout-admin，强制继承角色页面的样式 */
+.layui-layout-admin .layui-side {
+    background-color: #23262E !important; /* 与角色页面侧边栏背景色一致 */
+}
+
+.layui-layout-admin .layui-side-scroll {
+    width: 200px !important; /* 固定侧边栏宽度，与内容区偏移匹配 */
+}

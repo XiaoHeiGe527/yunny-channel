@@ -1,0 +1,87 @@
+* {
+	margin: 0;
+	padding: 0
+}
+
+ul, li {
+	list-style: none;
+}
+
+a:link, a:visited {
+	text-decoration: none;
+}
+
+
+.list ul li {
+	background-color: #467ca2;
+}
+
+.list ul li a {
+	padding-left: 10px;
+	color: #fff;
+	font-size: 12px;
+	display: block;
+	font-weight: bold;
+	height: 45px;
+	line-height: 45px;
+	position: relative;
+}
+
+.list ul li .inactive {
+	background: url(../images/arrow_d.png) no-repeat 170px center;
+}
+
+.list ul li .inactives {
+	background: url(../images/arrow_u.png) no-repeat 170px center;
+}
+
+.list ul li ul {
+	display: none;
+}
+
+.list ul li ul li {
+	border-left: 0;
+	border-right: 0;
+	background-color: #6196bb;
+	border-top: solid 1px #316a91;
+}
+
+.list ul li ul li ul {
+	display: none;
+}
+
+.list ul li ul li a {
+	padding-left: 20px;
+}
+
+.list ul li ul li ul li {
+	background-color: #d6e6f1;
+}
+
+.list ul li ul li ul li a {
+	color: #316a91;
+	padding-left: 30px;
+}
+
+.list ul li a:hover {
+	color: #ff8000;
+	border-left: solid 5px #ffff80;
+}
+
+.list ul li .datacss{
+    color: #316a91;
+	background-color: #d6e6f1;
+}
+
+.forcss{
+	position: fixed;
+    bottom: 0px;
+    text-align: center;
+    width: 100%;
+    background-color: #eee;
+    height: 45px;
+    line-height: 45px;
+    margin-bottom: 0px;
+    z-index: 10000;
+}
+

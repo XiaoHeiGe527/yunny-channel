@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.DictionaryMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.DictionaryDO">
+             <id column="id" jdbcType="BIGINT" property="id"/>
+             <id column="category" jdbcType="VARCHAR" property="category"/>
+             <id column="code_num" jdbcType="VARCHAR" property="codeNum"/>
+             <id column="content" jdbcType="VARCHAR" property="content"/>
+             <id column="remarks" jdbcType="VARCHAR" property="remarks"/>
+             <id column="serial_number" jdbcType="INTEGER" property="serialNumber"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            category,
+            code_num,
+            content,
+            remarks,
+            serial_number
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.DictionaryQuery" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from dictionary
+        where  1 = 1
+
+        <if test="category != null and category != ''">
+            and category = #{category}
+        </if>
+
+        <if test="remarks != null and remarks != ''">
+            and remarks = #{remarks}
+        </if>
+
+        <if test="codeNum != null and codeNum != ''">
+            and code_num = #{codeNum}
+        </if>
+
+        <if test="explain != null and  explain != ''">
+            and content like  "%"#{explain,jdbcType=VARCHAR}"%"
+        </if>
+
+        ORDER BY
+
+        COALESCE(serial_number, 999999) ASC,
+        CAST(code_num AS UNSIGNED) ASC
+
+        <if test="pageParameter!=null">
+            LIMIT #{pageParameter.offset}, #{pageParameter.pageSize}
+        </if>
+
+
+    </select>
+
+     <select id="countByQuery" parameterType="com.yunny.channel.common.query.DictionaryQuery" resultType="java.lang.Long">
+       select count(*) from dictionary
+         where  1 = 1
+         <if test="category != null and category != ''">
+             and category = #{category}
+         </if>
+
+
+         <if test="remarks != null and remarks != ''">
+             and remarks = #{remarks}
+         </if>
+
+
+         <if test="codeNum != null and codeNum != ''">
+             and code_num = #{codeNum}
+         </if>
+
+         <if test="explain != null and  explain != ''">
+             and content like  "%"#{explain,jdbcType=VARCHAR}"%"
+         </if>
+
+         <if test="notId != null and notId != ''">
+             and id != #{notId}
+         </if>
+
+     </select>
+
+     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+         select
+         <include refid="Base_Column_List" />
+         from dictionary
+         where id = #{id}
+    </select>
+
+
+    <!-- 新增表dictionary信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.DictionaryDO">
+        insert into dictionary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="category != null and category != ''">
+                        category,
+                    </if>
+                    <if test="codeNum != null and codeNum != ''">
+                        code_num,
+                    </if>
+                    <if test="content != null and content != ''">
+                        content,
+                    </if>
+                    <if test="remarks != null and remarks != ''">
+                        remarks,
+                    </if>
+                    <if test="serialNumber != null">
+                        serial_number,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="category != null and category != ''">
+                    #{category},
+                </if>
+                <if test="codeNum != null and codeNum != ''">
+                    #{codeNum},
+                </if>
+                <if test="content != null and content != ''">
+                    #{content},
+                </if>
+                <if test="remarks != null and remarks != ''">
+                    #{remarks},
+                </if>
+                <if test="serialNumber != null">
+                    #{serialNumber},
+                </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.DictionaryDO">
+        UPDATE dictionary
+        <set>
+                <if test="category != null and category != ''">
+                    category = #{category},
+                </if>
+                <if test="codeNum != null and codeNum != ''">
+                    code_num = #{codeNum},
+                </if>
+                <if test="content != null and content != ''">
+                    content = #{content},
+                </if>
+                <if test="remarks != null and remarks != ''">
+                    remarks = #{remarks},
+                </if>
+                <if test="serialNumber != null">
+                    serial_number = #{serialNumber},
+                </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunny.channel.mapper.SystemLogMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.SystemLogDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <id column="operation_type" jdbcType="TINYINT" property="operationType"/>
+        <id column="url" jdbcType="VARCHAR" property="url"/>
+      <!--  <id column="content" jdbcType="TEXT" property="content"/>-->
+        <id column="content" jdbcType="LONGVARCHAR" property="content"/>
+        <id column="user_no" jdbcType="VARCHAR" property="userNo"/>
+        <id column="operator_name" jdbcType="VARCHAR" property="operatorName"/>
+        <id column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <id column="ip" jdbcType="VARCHAR" property="ip"/>
+        <id column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <id column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            operation_type,
+            url,
+            content,
+            user_no,
+            operator_name,
+            remarks,
+            ip,
+            create_time,
+            update_time
+    </sql>
+
+    <select id="listByQuery" parameterType="com.yunny.channel.common.query.SystemLogQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from system_log
+
+        WHERE 1 = 1
+
+        <if test="operationType != null">
+            and  operation_type = #{operationType}
+        </if>
+
+        <if test="url != null and  url != ''">
+            and url like  "%"#{url,jdbcType=VARCHAR}"%"
+        </if>
+
+
+        ORDER BY  id desc
+
+        <if test="pageParameter!=null">
+            LIMIT #{pageParameter.offset}, #{pageParameter.pageSize}
+        </if>
+
+
+    </select>
+
+    <select id="countByQuery" parameterType="com.yunny.channel.common.query.SystemLogQuery" resultType="java.lang.Long">
+       select count(*) from system_log
+
+        WHERE 1 = 1
+        <if test="operationType != null">
+            and  operation_type = #{operationType}
+        </if>
+
+        <if test="url != null and  url != ''">
+            and url like  "%"#{url,jdbcType=VARCHAR}"%"
+        </if>
+
+    </select>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from system_log
+        where id = #{id}
+    </select>
+
+
+    <!-- 新增表system_log信息 -->
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.SystemLogDO">
+        insert into system_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="operationType != null">
+                operation_type,
+            </if>
+            <if test="url != null and url != ''">
+                url,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="userNo != null and userNo != ''">
+                user_no,
+            </if>
+            <if test="operatorName != null and operatorName != ''">
+                operator_name,
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks,
+            </if>
+            <if test="ip != null and ip != ''">
+                ip,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="operationType != null">
+                #{operationType},
+            </if>
+            <if test="url != null and url != ''">
+                #{url},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="userNo != null and userNo != ''">
+                #{userNo},
+            </if>
+            <if test="operatorName != null and operatorName != ''">
+                #{operatorName},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                #{remarks},
+            </if>
+            <if test="ip != null and ip != ''">
+                #{ip},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据主键更新表信息 -->
+    <update id="updateSelective" parameterType="com.yunny.channel.common.entity.SystemLogDO">
+        UPDATE system_log
+        <set>
+            <if test="operationType != null">
+                operation_type = #{operationType},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="userNo != null and userNo != ''">
+                user_no = #{userNo},
+            </if>
+            <if test="operatorName != null and operatorName != ''">
+                operator_name = #{operatorName},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="ip != null and ip != ''">
+                ip = #{ip},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+</mapper>

@@ -1,8 +1,17 @@
 package com.yunny.channel.common.util;
 
+import cn.hutool.json.JSONUtil;
+import org.apache.commons.lang3.StringEscapeUtils;
+
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
+
+
+
 
 /**
  * @author Mr. Du
@@ -53,5 +62,49 @@ public class StringUtil {
     }
 
     private static final String hexDigits[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+
+
+    /**
+     * 按照指定字符 切割
+     * @param str 字符串
+     * @param regex 分割点
+     * @return
+     */
+    public static  ArrayList<String> split(String str,String regex){
+        ArrayList  strList = new ArrayList();
+        if(StringUtil.isEmpty(str)||StringUtil.isEmpty(regex)){
+            strList.add(str);
+
+        }else {
+            String a []  = str.split(regex);
+
+            for(int i=0;i<a.length;i++){
+                strList.add(a[i]);
+            }
+        }
+
+        return strList;
+    }
+
+//
+//    public static void main(String[] args) {
+//
+//        List<String> imagesList = new ArrayList<>();
+//        imagesList.add("\\mydata\\zijinchakong\\task\\2024-04-18/cqbgs_20240418155254_1.png");
+//        imagesList.add("\\mydata\\zijinchakong\\task\\2024-04-18/cqbgs_20240418155254_2.png");
+//        imagesList.add("\\mydata\\zijinchakong\\task\\2024-04-18/cqbgs_20240418155254_3.png");
+//
+//        // 使用 JSONUtil.toJsonStr 输出 JSON 字符串
+//        String imagesJsonString = JSONUtil.toJsonStr(imagesList);
+//
+//        // 输出结果
+//        System.out.println("imagesJsonString=========[" + imagesJsonString + "]");
+//
+//
+//        String tmp = StringEscapeUtils.unescapeJavaScript(imagesJsonString);
+//
+//        // 输出结果
+//        System.out.println("tmp=========[" + tmp + "]");
+//    }
 
 }

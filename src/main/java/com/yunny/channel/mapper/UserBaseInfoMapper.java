@@ -1,6 +1,7 @@
 package com.yunny.channel.mapper;
 
 import com.yunny.channel.common.entity.UserBaseInfoDO;
+import com.yunny.channel.common.query.LoginUserQuery;
 import com.yunny.channel.common.query.UserBaseInfoQuery;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -16,6 +17,14 @@ public interface UserBaseInfoMapper {
      * @return
      */
     List<UserBaseInfoDO> selectUserBaseInfoDOList(UserBaseInfoQuery userBaseInfoQuery);
+
+    /**
+     * 查询用户
+     *
+     * @param query
+     * @return
+     */
+    List<UserBaseInfoDO> queryUserBaseInfoDOList(LoginUserQuery query);
 
 
     /**

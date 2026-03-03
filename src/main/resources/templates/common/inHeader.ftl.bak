@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<style>
+    body {
+        margin: 0;
+    }
+
+    /* 导航栏整体样式 */
+    .layui-nav {
+        display: flex;
+        justify-content: flex-end;
+        background-color: #1E90FF !important; /* 蓝色主色调 */
+        padding: 0 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .layui-nav-item {
+        margin: 0 5px;
+        transition: all 0.3s;
+    }
+
+    .layui-nav-item:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .layui-nav .layui-nav-item a {
+        font-size: 16px;
+        color: #fff;
+        height: 50px;
+        line-height: 50px;
+        padding: 0 15px;
+        position: relative;
+    }
+
+    /* 选中状态样式 */
+    .layui-nav-item.layui-this {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .layui-nav-item.layui-this a {
+        color: #FFD700;
+    }
+
+    .layui-nav-item.layui-this a::after {
+        width: 50%;
+        left: 25%;
+    }
+
+    .layui-nav .layui-nav-item a:hover {
+        color: #FFD700;
+    }
+
+    .layui-nav .layui-nav-item a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: #FFD700;
+        transition: width 0.3s, left 0.3s;
+    }
+
+    .layui-nav .layui-nav-item a:hover::after {
+        width: 50%;
+        left: 25%;
+    }
+
+    .layui-badge {
+        background-color: #FF4500;
+        font-size: 12px;
+        margin-left: 5px;
+    }
+
+    /* 下拉菜单样式 */
+    .layui-nav-child {
+        background-color: #2196F3;
+        border-radius: 0 0 4px 4px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .layui-nav-child a {
+        color: #fff !important;
+        padding: 0 20px;
+        font-size: 14px;
+    }
+
+    .layui-nav-child a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* 折叠图标样式 */
+    .nav-icon {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;
+        vertical-align: middle;
+        transition: transform 0.3s;
+    }
+
+    .nav-icon::before, .nav-icon::after {
+        content: '';
+        display: block;
+        width: 16px;
+        height: 2px;
+        background-color: currentColor;
+        margin: 3px 0;
+        transition: all 0.3s;
+    }
+
+    .layui-nav-itemed .nav-icon {
+        transform: rotate(90deg);
+    }
+
+    .layui-nav-itemed .nav-icon::before {
+        transform: rotate(45deg) translate(4px, 4px);
+    }
+
+    .layui-nav-itemed .nav-icon::after {
+        transform: rotate(-45deg) translate(4px, -4px);
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+        .layui-nav {
+            padding: 0 10px;
+        }
+
+        .layui-nav .layui-nav-item a {
+            padding: 0 10px;
+            font-size: 14px;
+        }
+    }
+</style>
+
+<!-- 导航栏HTML结构 -->
+<ul class="layui-nav layui-bg-cyan" lay-filter="mainNav">
+
+
+
+    <li class="layui-nav-item" id="homepageLi">
+        <a href="javascript:void(0);" id="homepage">首页</a>
+    </li>
+
+    <!-- 采购管理折叠菜单 -->
+    <li class="layui-nav-item" id="purchaseManagementLi">
+        <a href="javascript:void(0);">
+            采购管理
+            <span class="nav-icon" style="color: #fff;"></span>
+        </a>
+        <dl class="layui-nav-child">
+            <dd id="materialPlanSubmitLiChild">
+                <a href="javascript:void(0);" id="materialPlanSubmitLinkChild">提计划</a>
+            </dd>
+            <dd id="materialPlanListLiChild">
+                <a href="javascript:void(0);" id="materialPlanListLinkChild">采购计划列表</a>
+            </dd>
+        </dl>
+    </li>
+
+    <!-- 档案管理折叠菜单 -->
+    <li class="layui-nav-item" id="archivesManagementParentLi">
+        <a href="javascript:void(0);">
+            档案管理
+            <span class="nav-icon" style="color: #fff;"></span>
+        </a>
+        <dl class="layui-nav-child">
+            <dd id="archivesManagementLiChild">
+                <a href="javascript:void(0);" id="archivesManagementLinkChild">员工档案管理</a>
+            </dd>
+            <dd id="chemicalFileLiChild">
+                <a href="javascript:void(0);" id="chemicalFileLinkChild">综合文件档案</a>
+            </dd>
+            <dd id="technicalFileLiChild">
+                <a href="javascript:void(0);" id="technicalFileLinkChild">技术文件档案</a>
+            </dd>
+        </dl>
+    </li>
+
+    <!-- 车辆管理折叠菜单 -->
+    <li class="layui-nav-item" id="vehicleManagementLi">
+        <a href="javascript:void(0);">
+            车辆管理
+            <span class="nav-icon" style="color: #fff;"></span>
+        </a>
+        <dl class="layui-nav-child">
+            <dd id="insuranceReminderLiChild">
+                <a href="javascript:void(0);" id="insuranceReminderLinkChild">车辆承保到期提醒<span class="layui-badge">${Request.expirationReminderCount!0}</span></a>
+            </dd>
+            <dd id="companyVehiclesListByPageLiChild">
+                <a href="javascript:void(0);" id="companyVehiclesListByPageChild">车辆信息页</a>
+            </dd>
+            <dd id="vehiclesOutwardCardListPageLiChild">
+                <a href="javascript:void(0);" id="vehiclesOutwardCardListPageLinkChild">车卡信息列表提醒<span class="layui-badge">${Request.vehiclesOutwardCardCount!0}</span></a>
+            </dd>
+            <dd id="gpsMonitoringLiChild" style="display: none;">
+                <a href="javascript:void(0);" id="gpsMonitoringLinkChild">GPS定位系统</a>
+            </dd>
+        </dl>
+    </li>
+
+    <!-- 系统管理折叠菜单 -->
+    <!-- 系统管理折叠菜单 -->
+    <li class="layui-nav-item" id="systemManagementLi">
+        <a href="javascript:void(0);">
+            系统管理
+            <span class="nav-icon" style="color: #fff;"></span>
+        </a>
+        <dl class="layui-nav-child">
+            <dd id="systemLogLiChild">
+                <a href="javascript:void(0);" id="systemLogLinkChild">系统日志</a>
+            </dd>
+            <dd id="dictionaryLiChild">
+                <a href="javascript:void(0);" id="dictionaryLinkChild">字典管理</a>
+            </dd>
+            <dd id="systemUserLiChild">
+                <a href="javascript:void(0);" id="systemUserLinkChild">系统用户管理</a>
+            </dd>
+            <!-- 新增：系统角色管理 -->
+            <dd id="systemRoleLiChild">
+                <a href="javascript:void(0);" id="systemRoleLinkChild">系统角色管理</a>
+            </dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item" id="changePasswordLi">
+        <a href="javascript:void(0);" id="changePasswordLink">修改密码</a>
+    </li>
+    <li class="layui-nav-item" id="outLinkLi">
+        <a href="javascript:void(0);" id="outLink">退出登录</a>
+    </li>
+</ul>
+
+<!-- 注入FTL变量到全局，供外部JS使用 -->
+<script>
+    // 将FTL变量挂载到window对象，作为全局变量
+    window.navConfig = {
+        token: '${Request.token}',
+        userNo: '${Request.userNo}',
+        gpsMonitoringUrl: 'http://42.101.60.52:8081/index/monitoring/liveSurveillance'
+    };
+</script>
+
+<!-- 引入外部JS文件（业务逻辑） -->
+<!-- 引入外部JS文件 -->
+<script src="/js/myjs/inHeader.js"></script>

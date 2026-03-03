@@ -45,7 +45,34 @@
     </select>
 
 
+    <select id="queryUserBaseInfoDOList" parameterType="com.yunny.channel.common.query.LoginUserQuery"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_base_info
+        <where>
 
+            <if test="status != null">
+                and  status = #{status,jdbcType=TINYINT}
+            </if>
+
+            <if test="mobile!=null and mobile!='' ">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+
+            <if test="userNo!=null">
+                and user_no = #{userNo,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="password != null and password!='' ">
+                and  password = #{password,jdbcType=VARCHAR}
+            </if>
+
+        </where>
+
+
+    </select>
 
     <select id="countByQuery" parameterType="com.yunny.channel.common.query.UserBaseInfoQuery" resultType="java.lang.Long">
         select count(*) from user_base_info

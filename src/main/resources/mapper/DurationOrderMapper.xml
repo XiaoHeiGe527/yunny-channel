@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aoyou.yunny.order.mapper.DurationOrderMapper">
+    <resultMap id="BaseResultMap" type="com.yunny.channel.common.entity.DurationOrderDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="device_no" jdbcType="VARCHAR" property="deviceNo"/>
+        <result column="product_no" jdbcType="VARCHAR" property="productNo"/>
+        <result column="user_no" jdbcType="VARCHAR" property="userNo"/>
+        <result column="reset_times" jdbcType="INTEGER" property="resetTimes"/>
+        <result column="due_time" jdbcType="TIMESTAMP" property="dueTime"/>
+        <result column="show_time" jdbcType="TIMESTAMP" property="showTime"/>
+        <result column="retention_time" jdbcType="TIMESTAMP" property="retentionTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="channel_no" jdbcType="TINYINT" property="channelNo"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    id, order_no, device_no, product_no, user_no, reset_times, due_time, show_time, retention_time,
+    create_time, update_time, state, channel_no
+  </sql>
+
+    <sql id="Base_Column_List_new">
+    id, order_no, device_no, product_no, user_no, reset_times, due_time, show_time, retention_time,
+    create_time, update_time, state,channel_no
+  </sql>
+    <insert id="insertSelective" parameterType="com.yunny.channel.common.entity.DurationOrderDO" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into duration_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="deviceNo != null">
+                device_no,
+            </if>
+            <if test="productNo != null">
+                product_no,
+            </if>
+            <if test="userNo != null">
+                user_no,
+            </if>
+            <if test="resetTimes != null">
+                reset_times,
+            </if>
+            <if test="dueTime != null">
+                due_time,
+            </if>
+            <if test="showTime != null">
+                show_time,
+            </if>
+            <if test="retentionTime != null">
+                retention_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+
+            <if test="channelNo != null">
+                channel_no,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceNo != null">
+                #{deviceNo,jdbcType=VARCHAR},
+            </if>
+            <if test="productNo != null">
+                #{productNo,jdbcType=VARCHAR},
+            </if>
+            <if test="userNo != null">
+                #{userNo,jdbcType=VARCHAR},
+            </if>
+            <if test="resetTimes != null">
+                #{resetTimes,jdbcType=INTEGER},
+            </if>
+            <if test="dueTime != null">
+                #{dueTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="showTime != null">
+                #{showTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="retentionTime != null">
+                #{retentionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=TINYINT},
+            </if>
+
+            <if test="channelNo != null">
+                #{channelNo,jdbcType=TINYINT},
+            </if>
+
+        </trim>
+    </insert>
+
+    <select id="getByDeviceNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List_new"/>
+        FROM duration_order
+        <where>
+            <if test="deviceNo!=null">
+                and device_no=#{deviceNo,jdbcType=VARCHAR}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="getByOrderNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM duration_order
+        <where>
+            state = 1
+            <if test="orderNo!=null">
+                and order_no=#{orderNo,jdbcType=VARCHAR}
+            </if>
+        </where>
+
+    </select>
+
+
+    <select id="getByOnlyOrder" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM duration_order
+        <where>
+
+            <if test="orderNo!=null">
+                and order_no=#{orderNo,jdbcType=VARCHAR}
+            </if>
+        </where>
+
+    </select>
+
+
+
+
+
+    <select id="getDurationOrderListByState" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM duration_order
+        <where>
+
+            <if test="state!=null">
+                and state=#{state,jdbcType=TINYINT}
+            </if>
+        </where>
+
+    </select>
+
+
+    <select id="getByStateList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM duration_order
+        <where>
+
+            <if test="stateList != null">
+                state in
+                <foreach collection="stateList" index="index" item="state" open="(" separator="," close=")">
+                    #{state}
+                </foreach>
+            </if>
+
+        </where>
+
+    </select>
+
+    <update id="updateInvalidByById" parameterType="java.lang.Long">
+
+        update duration_order
+        <set>
+            state = 0
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="queryByOrderNoList" parameterType="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from duration_order a
+        <where>
+
+            <if test="list != null and list.size()>0">
+                AND a.order_no IN
+                <foreach item="item" index="index" collection="list" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <update id="updateByOrderNo" parameterType="com.yunny.channel.common.entity.DurationOrderDO">
+        update duration_order
+        <set>
+            <if test="deviceNo != null">
+                device_no = #{deviceNo,jdbcType=VARCHAR},
+            </if>
+            <if test="productNo != null">
+                product_no = #{productNo,jdbcType=TINYINT},
+            </if>
+            <if test="userNo != null">
+                user_no = #{userNo,jdbcType=INTEGER},
+            </if>
+            <if test="resetTimes != null">
+                reset_times = #{resetTimes,jdbcType=INTEGER},
+            </if>
+            <if test="dueTime != null">
+                due_time = #{dueTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="showTime != null">
+                show_time = #{showTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="retentionTime != null">
+                retention_time = #{retentionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=TINYINT},
+            </if>
+
+            <if test="channelNo != null">
+                channel_no = #{channelNo,jdbcType=TINYINT},
+            </if>
+
+
+        </set>
+        where order_no = #{orderNo,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateStateByOrderNo" parameterType="com.yunny.channel.common.dto.OperationSwitchDTO">
+        update duration_order
+        <set>
+            state =#{state,jdbcType=BIGINT}
+        </set>
+        where order_no = #{orderNo,jdbcType=BIGINT}
+    </update>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM duration_order
+        <where>
+
+            <if test="id!=null">
+                and id=#{id,jdbcType=BIGINT}
+            </if>
+        </where>
+
+    </select>
+    <select id="selectByDeviceNo" resultMap="BaseResultMap" parameterType="com.yunny.channel.common.query.DurationQuery">
+        select
+        <include refid="Base_Column_List_new"/>
+        from duration_order
+        <where>
+
+            <if test="deviceNo!=null and deviceNo!=''">
+                and device_no=#{deviceNo}
+            </if>
+            <if test="state!=null">
+                and state=#{state}
+            </if>
+
+        </where>
+    </select>
+    <select id="findAllByUserNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from duration_order
+        where user_no=#{userNo,jdbcType=VARCHAR}
+    </select>
+
+    <resultMap id="DurationOrderJoinAdOrderMap" type="com.yunny.channel.common.entity.DurationOrderJoinAdOrderDO">
+        <result column="machine_id" jdbcType="VARCHAR" property="machineId" />
+        <result column="machine_key" jdbcType="VARCHAR" property="machineKey" />
+        <result column="machine_token" jdbcType="VARCHAR" property="machineToken" />
+        <result column="machine_name" jdbcType="VARCHAR" property="machineName" />
+        <result column="retention_time" jdbcType="TIMESTAMP" property="retentionTime"/>
+        <result column="product_no" jdbcType="VARCHAR" property="productNo" />
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+        <result column="device_no" jdbcType="VARCHAR" property="deviceNo"/>
+        <result column="user_no" jdbcType="VARCHAR" property="userNo"/>
+    </resultMap>
+
+    <select id="getDurationOrderJoinAdOrderListByState" parameterType="java.lang.Integer" resultMap="DurationOrderJoinAdOrderMap">
+        select
+        a.retention_time,a.order_no,a.user_no,a.device_no,
+        b.machine_token,b.machine_name,b.machine_id,b.machine_key,b.product_no
+        from duration_order a
+        LEFT JOIN order_ad b
+        ON a.order_no = b.order_no
+        <where>
+            and b.state =1
+            <if test="state!=null">
+                and a.state=#{state,jdbcType=TINYINT}
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="BaseResultMap2" type="com.yunny.channel.common.entity.DurationOrderDO2">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+        <result column="device_no" jdbcType="VARCHAR" property="deviceNo" />
+        <result column="product_no" jdbcType="VARCHAR" property="productNo" />
+        <result column="user_no" jdbcType="VARCHAR" property="userNo" />
+        <result column="reset_times" jdbcType="INTEGER" property="resetTimes" />
+        <result column="due_time" jdbcType="TIMESTAMP" property="dueTime" />
+        <result column="show_time" jdbcType="TIMESTAMP" property="showTime" />
+        <result column="retention_time" jdbcType="TIMESTAMP" property="retentionTime" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="state" jdbcType="TINYINT" property="state" />
+        <result column="channel_no" jdbcType="TINYINT" property="channelNo" />
+        <result column="machine_key" jdbcType="VARCHAR" property="machineKey" />
+        <result column="machine_name" jdbcType="VARCHAR" property="machineName"/>
+    </resultMap>
+    <select id="selectByList" parameterType="com.yunny.channel.common.query.ProductInfoDmmQuery" resultMap="BaseResultMap2">
+        SELECT
+        `do`.*,oa.machine_key,oa.machine_name
+        FROM
+        order_ad oa
+        LEFT JOIN duration_order `do`
+        ON oa.order_no = `do`.order_no
+        <where>
+            <if test="userNo!=null">
+                AND oa.user_no = #{userNo}
+            </if>
+            <if test="channelNo!=null">
+                AND do.channel_no = #{channelNo}
+            </if>
+            <!--查询未销毁的机器-->
+            <if test="state!=null">
+                AND do.state != #{state}
+                and do.state !=4
+            </if>
+            <if test="deviceNo != null and deviceNo != ''">
+                AND oa.device_no=#{deviceNo}
+            </if>
+            <if test="productNoList">
+                AND do.product_no in
+                <foreach collection="productNoList" item="productNo" index="index" open="(" separator="," close=")">
+                    #{productNo}
+                </foreach>
+            </if>
+
+        </where>
+        order by update_time desc
+        <if test="pageParameter != null">
+            limit #{pageParameter.offset},#{pageParameter.pageSize}
+        </if>
+    </select>
+
+    <select id="selectByListCount" parameterType="com.yunny.channel.common.query.ProductInfoDmmQuery" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        order_ad oa
+        LEFT JOIN duration_order `do`
+        ON oa.order_no = `do`.order_no
+        <where>
+            <if test="userNo!=null">
+                AND oa.user_no = #{userNo}
+            </if>
+            <if test="channelNo!=null">
+                AND do.channel_no = #{channelNo}
+            </if>
+            <if test="state!=null">
+                AND do.state != #{state}
+            </if>
+            <if test="deviceNo != null and deviceNo != ''">
+                AND oa.device_no=#{deviceNo}
+            </if>
+            <if test="productNoList!=null">
+                AND do.product_no in
+                <foreach collection="productNoList" item="productNo" index="index" open="(" separator="," close=")">
+                    #{productNo}
+                </foreach>
+            </if>
+
+        </where>
+
+    </select>
+
+
+
+    <select id="selectDurationOrder" parameterType="com.yunny.channel.common.query.OrderVmQuery"  resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM duration_order
+        <where>
+            state = 1
+            <if test="orderNo!=null">
+                and order_no=#{orderNo,jdbcType=VARCHAR}
+            </if>
+
+        </where>
+
+    </select>
+
+
+
+    <resultMap id="GetByStateListAndDueTimeResultMap" type="com.yunny.channel.common.entity.DurationOrderSFWDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="user_no" jdbcType="VARCHAR" property="userNo"/>
+        <result column="due_time" jdbcType="TIMESTAMP" property="dueTime" />
+
+    </resultMap>
+
+
+<!-- 查询到期时间小于等于指定时间的时长订单(到期时间小于当前MYsql now()函数 时间的) -->
+    <select id="getByStateListAndDueTime" resultMap="GetByStateListAndDueTimeResultMap" parameterType="com.yunny.channel.common.query.DurationOrderQuery">
+
+        SELECT
+        a.user_no,a.order_no,b.mobile,a.due_time
+        FROM
+        duration_order a
+
+        LEFT JOIN order_ad b
+
+        ON a.order_no = b.order_no
+
+        <where>
+
+            b.state = 1
+            and  a.due_time >now()
+
+            <if test="dueTimeStr != null">
+                and a.due_time  <![CDATA[<=]]>  #{dueTimeStr,jdbcType=TIMESTAMP}
+            </if>
+
+            <if test="stateList != null and stateList.size()>0">
+                and  a.state in
+                <foreach collection="stateList" index="index" item="state" open="(" separator="," close=")">
+                    #{state}
+                </foreach>
+            </if>
+
+        </where>
+
+    </select>
+
+</mapper>

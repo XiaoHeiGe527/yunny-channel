@@ -2,6 +2,7 @@ package com.yunny.channel.common.query;
 
 import com.yunny.channel.common.interfaces.InsertGroup;
 import com.yunny.channel.common.interfaces.UpdateGroup;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

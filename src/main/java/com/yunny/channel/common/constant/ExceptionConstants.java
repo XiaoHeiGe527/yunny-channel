@@ -54,4 +54,18 @@ public class ExceptionConstants {
 
 	/** 激活卡激活虚机请求的端 不是盒子端 */
 	public static final int ASSIGN_VM_NO_BOX = 4002;
+
+	public static final  int PARAMETER_NULL= 30001;
+	public static final  int PARAMETER_ERR= 30002;
+
+
+
+	public static final int ErrNetwork= 4016;//请求网络异常
+	public static final int EXCEPTION_SESSION= 4017;//session异常
+
+	public static final int  EXCEPTION= 5001;
+
+
+	/** 请求失败*/
+	public static final int HTTP_POST_FAIL = 5000;
 }
