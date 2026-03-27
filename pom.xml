@@ -34,7 +34,7 @@
         <!-- hutool工具集 参考文档：https://hutool.cn/docs -->
         <hutool.version>5.8.21</hutool.version>
         <!-- 工具集 -->
-        <commons-lang3.version>3.9</commons-lang3.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <aspectjrt.version>1.9.7</aspectjrt.version>
         <okhttp3-logging-interceptort.version>3.4.1 </okhttp3-logging-interceptort.version>
 
